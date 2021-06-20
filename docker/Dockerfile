@@ -6,7 +6,7 @@ LABEL AUTHOR="none" \
 ENV DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIES_LIST=/scripts/logs/cookies.list \
-    REPO_URL=https://github.com/JDHelloWorld/jd_scripts.git \
+    REPO_URL=https://github.com/yangfabing/own_jd.git \
     REPO_BRANCH=main
 
 RUN set -ex \
