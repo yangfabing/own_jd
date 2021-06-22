@@ -18,9 +18,6 @@ else
   git -C /scripts pull --rebase
   echo "npm install 安装最新依赖"
   npm install --prefix /scripts
-  echo "npm 手动安装 canvas"
-  apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev
-  npm install canvas --build-from-source
 fi
 ) || exit 0
 
