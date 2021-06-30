@@ -8,7 +8,6 @@ cron 59 7,15,23 * * * * 或 0 0,8,16 * * *
 """
 
 import json
-import random
 import sys
 import threading
 import time
@@ -23,7 +22,7 @@ def main(cookie, validate):
         'accept': '*/*',
         'content-type': 'application/json',
         'origin': 'https://h5.m.jd.com',
-        "User-Agent": USER_AGENTS[random.randint(0, len(USER_AGENTS)-1)],
+        "User-Agent": USER_AGENTS,
         'referer': 'https://jdjoy.jd.com/',
         'accept-language': 'zh-cn',
         'cookie': cookie
@@ -43,7 +42,7 @@ def main(cookie, validate):
         sys.stdout.write(f"{bean['id']} {bean['giftName']} {bean['leftStock']}\n")
         if bean['giftValue'] == JD_JOY_REWARD_NAME:
             while 1:
-                if datetime.datetime.now().second == 0:
+                if datetime.datetime.now().second < 30:
                     break
                 time.sleep(0.1)
             sys.stdout.write('exchange()\n')
