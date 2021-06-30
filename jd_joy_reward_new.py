@@ -23,7 +23,7 @@ def main(cookie, validate):
         'accept': '*/*',
         'content-type': 'application/json',
         'origin': 'https://h5.m.jd.com',
-        "User-Agent": USER_AGENTS[random.randint(0, len(USER_AGENTS))],
+        "User-Agent": USER_AGENTS[random.randint(0, len(USER_AGENTS)-1)],
         'referer': 'https://jdjoy.jd.com/',
         'accept-language': 'zh-cn',
         'cookie': cookie
