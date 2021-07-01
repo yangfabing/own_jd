@@ -20,7 +20,7 @@ let useInfo = {};
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let newShareCodes = [];
-let ljsdh = '';
+let ljsdh = 'jdAward4';
 if (process.env.ljsdh) {
   ljsdh = process.env.ljsdh;
 }
