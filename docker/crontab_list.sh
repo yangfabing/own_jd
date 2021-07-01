@@ -67,7 +67,7 @@
 # 东东工厂
 26 * * * * node /scripts/jd_jdfactory.js >> /scripts/logs/jd_jdfactory.log 2>&1
 # 赚京豆(微信小程序)
-0 0 * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
+5 0 * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
 # 京东快递签到
 47 1 * * * node /scripts/jd_kd.js >> /scripts/logs/jd_kd.log 2>&1
 # 京东汽车(签到满500赛点可兑换500京豆)
@@ -160,6 +160,8 @@
 0 8,15 * * * python3 /scripts/jd_OpenCard.py >> /scripts/logs/jd_OpenCard.log 2>&1
 #关注有礼
 15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
+#微信小程序-赚京豆-瓜分京豆python版
+0 0 * * * python3 /scripts/jd_zjd.py >> /scripts/logs/jd_zjd.log 2>&1
 #京东众筹抽奖
 20 12,14 * * * node /scripts/jd_hwsx.js >> /scripts/logs/jd_hwsx.log 2>&1
 #泡泡战
