@@ -156,3 +156,7 @@
 30 11 * * * node /scripts/jd_superBrand.js >> /scripts/logs/jd_superBrand.log 2>&1
 #美食零食街
 0 11 * * * node /scripts/jd_lsj.js >> /scripts/logs/jd_lsj.log 2>&1
+#入会
+0 8,15 * * * python3 /scripts/jd_OpenCard.py >> /scripts/logs/jd_OpenCard.log 2>&1
+#关注有礼
+15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
