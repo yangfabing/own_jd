@@ -82,8 +82,11 @@ $.get(options, async (err, resp, data) => {
             data = JSON.parse(data);
             if( data.errcode == 0 ){
               console.log(`剩余游戏抽奖次数${data.data.currdaydrawnum}`)
-              cs = data.data.currdaydrawnum}
-              console.log(`即将抽奖25次,14点再继续25次 分开中奖几率可能大些`)
+              cs = data.data.currdaydrawnum
+            }else{
+              console.log(`发生错误${data.errcode}`)
+            }
+            console.log(`即将抽奖25次,14点再继续25次 分开中奖几率可能大些`)
 if(cs > 0){
     
     for (let i = 0 ; i < 25; i++){
