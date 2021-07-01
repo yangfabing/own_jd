@@ -160,3 +160,7 @@
 0 8,15 * * * python3 /scripts/jd_OpenCard.py >> /scripts/logs/jd_OpenCard.log 2>&1
 #关注有礼
 15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
+#京东众筹抽奖
+20 12,14 * * * node /scripts/jd_hwsx.js >> /scripts/logs/jd_hwsx.log 2>&1
+#泡泡战
+1 0 * * * node /scripts/jd_ppdz.js >> /scripts/logs/jd_ppdz.log 2>&1
