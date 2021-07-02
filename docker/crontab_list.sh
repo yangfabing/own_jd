@@ -14,7 +14,7 @@
 1,31 0-23/1 * * * node /scripts/jd_live_redrain.js >> /scripts/logs/jd_live_redrain.log 2>&1
 
 #每日抽奖(活动时间：2021-05-01至2021-05-31)
-13 1,22,23 * * * node /scripts/jd_daily_lottery.js >> /scripts/logs/jd_daily_lottery.log 2>&1
+# 13 1,22,23 * * * node /scripts/jd_daily_lottery.js >> /scripts/logs/jd_daily_lottery.log 2>&1
 
 #金榜创造营 活动时间：2021-05-21至2021-12-31
 0 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
@@ -35,7 +35,7 @@
 0 0,8,16 * * * node /scripts/jd_joy_reward_new.js >> /scripts/logs/jd_joy_reward_new.log 2>&1
 58 7,15,23 * * * node /scripts/jd_validate.js >> /scripts/logs/jd_validate.log 2>&1
 # 宠汪汪喂食
-35 */1 * * * node /scripts/jd_joy_feedPets.js >> /scripts/logs/jd_joy_feedPets.log 2>&1
+# 35 */1 * * * node /scripts/jd_joy_feedPets.js >> /scripts/logs/jd_joy_feedPets.log 2>&1
 # 摇钱树
 23 */2 * * * node /scripts/jd_moneyTree.js >> /scripts/logs/jd_moneyTree.log 2>&1
 # 东东萌宠
@@ -141,7 +141,7 @@
 #京东到家鲜豆庄园
 11 0 * * * node /scripts/jddj_plantBeans.js >> /scripts/logs/jddj_plantBeans.log 2>&1
 #京享值PK
-15 3,6,13,19,21 * * * node /scripts/jd_ddo_pk.js >> /scripts/logs/jd_ddo_pk.log 2>&1
+# 15 3,6,13,19,21 * * * node /scripts/jd_ddo_pk.js >> /scripts/logs/jd_ddo_pk.log 2>&1
 #京东试用
 30 11 * * * node /scripts/jd_try.js >> /scripts/logs/jd_try.log 2>&1
 #东东农场-东东乐园大风车
@@ -157,9 +157,9 @@
 #美食零食街
 0 11 * * * node /scripts/jd_lsj.js >> /scripts/logs/jd_lsj.log 2>&1
 #入会
-# 0 8,15 * * * python3 /scripts/jd_OpenCard.py >> /scripts/logs/jd_OpenCard.log 2>&1
+0 8,15 * * * python3 /scripts/jd_OpenCard.py >> /scripts/logs/jd_OpenCard.log 2>&1
 #关注有礼
-# 15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
+15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
 #微信小程序-赚京豆-瓜分京豆python版
 0 0 * * * python3 /scripts/jd_zjd.py >> /scripts/logs/jd_zjd.log 2>&1
 #京东众筹抽奖
