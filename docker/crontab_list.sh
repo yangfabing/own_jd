@@ -119,7 +119,7 @@
 # 领金贴
 5 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
 #京喜牧场
-15 0-23/3 * * * node /scripts/jd_jjxxmmcc.js >> /scripts/logs/jd_jjxxmmcc.log 2>&1
+15 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #电竞经理
 12 0-23/3 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
 #半点红包雨
