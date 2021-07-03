@@ -232,7 +232,7 @@ def liulan(task, taskid, duration, ck):
     resp = requests.get(url=url, headers=header, verify=False, timeout=30).json()
     if int(resp['code'] == 0):
         print(resp['data']['bizMsg'])
-        if int(resp['data']['bizCode']) != 0:
+        if int(resp['data']['bizCode']) != 1:
             return
         print(f'等待{duration}秒')
         time.sleep(duration)
@@ -271,7 +271,7 @@ def liulan_sku(task, taskid, duration, ck):
     resp = requests.get(url=url, headers=header, verify=False, timeout=30).json()
     if int(resp['code'] == 0):
         print(resp['data']['bizMsg'])
-        if int(resp['data']['bizCode']) != 0:
+        if int(resp['data']['bizCode']) != 1:
             return
         print(f'等待{duration}秒')
         time.sleep(duration)
