@@ -170,5 +170,7 @@
 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
 #众筹许愿池
 4 0 * * * python3 /scripts/jd_zcxyc.py >> /scripts/logs/jd_zcxyc.log 2>&1
+#早起领福利
+4 0 * * * python3 /scripts/jd_zqfl.py >> /scripts/logs/jd_zqfl.log 2>&1
 
 
