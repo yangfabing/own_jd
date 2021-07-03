@@ -168,3 +168,7 @@
 1 0 * * * node /scripts/jd_ppdz.js >> /scripts/logs/jd_ppdz.log 2>&1
 #全民抢京豆
 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
+#众筹许愿池
+4 0 * * * python3 /scripts/jd_zcxyc.py >> /scripts/logs/jd_zcxyc.log 2>&1
+
+
