@@ -141,7 +141,7 @@
 #京东到家鲜豆庄园
 11 0 * * * node /scripts/jddj_plantBeans.js >> /scripts/logs/jddj_plantBeans.log 2>&1
 #京享值PK
-# 15 3,6,13,19,21 * * * node /scripts/jd_ddo_pk.js >> /scripts/logs/jd_ddo_pk.log 2>&1
+15 3,6,13,19,21 * * * node /scripts/jd_ddo_pk.js >> /scripts/logs/jd_ddo_pk.log 2>&1
 #京东试用
 30 11 * * * node /scripts/jd_try.js >> /scripts/logs/jd_try.log 2>&1
 #东东农场-东东乐园大风车
@@ -172,5 +172,8 @@
 4 0 * * * python3 /scripts/jd_zcxyc.py >> /scripts/logs/jd_zcxyc.log 2>&1
 #早起领福利
 4 0 * * * python3 /scripts/jd_zqfl.py >> /scripts/logs/jd_zqfl.log 2>&1
+# 签到领现金-助力
+15 */4 * * * python3 /scripts/jd_cashHelp.py >> /scripts/logs/jd_cashHelp.log 2>&1
+
 
 
