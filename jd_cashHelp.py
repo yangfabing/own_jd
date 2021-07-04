@@ -12,7 +12,7 @@ TG频道 https://t.me/TopStyle2021
 #ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
 cookies = ''
 # 设置被助力的账号可填用户名 或 pin的值不要;
-cash_zlzh = ['Your JD_User', '买买买']
+cash_zlzh = ['137946283_m', 'jd_689e504053da3', '474208788HUA']
 
 ### 推送参数设置
 # TG 机器人token
