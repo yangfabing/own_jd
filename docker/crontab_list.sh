@@ -162,10 +162,6 @@
 15 8 * * * python3 /scripts/jd_getFollowGift.py >> /scripts/logs/jd_getFollowGift.log 2>&1
 #微信小程序-赚京豆-瓜分京豆python版
 0 0 * * * python3 /scripts/jd_zjd.py >> /scripts/logs/jd_zjd.log 2>&1
-#京东众筹抽奖
-20 12,14 * * * node /scripts/jd_hwsx.js >> /scripts/logs/jd_hwsx.log 2>&1
-#泡泡战
-1 0 * * * node /scripts/jd_ppdz.js >> /scripts/logs/jd_ppdz.log 2>&1
 #全民抢京豆
 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
 #众筹许愿池
