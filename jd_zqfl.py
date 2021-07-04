@@ -7,22 +7,6 @@
 # ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
 cookies = ''
 
-### 推送参数设置
-# TG 机器人token
-TG_BOT_TOKEN = ''
-# TG用户id
-TG_USER_ID = ''
-# TG代理ip
-TG_PROXY_IP = ''
-# TG代理端口
-TG_PROXY_PORT = ''
-# TG 代理api
-TG_API_HOST = ''
-# 微信推送加+
-PUSH_PLUS_TOKEN = ''
-QYWX_AM = ''
-BARK = ''
-
 # 建议调整一下的参数
 # UA 可自定义你的，注意格式: 【 jdapp;iPhone;10.0.4;14.2;9fb54498b32e17dfc5717744b5eaecda8366223c;network/wifi;ADID/2CF597D0-10D8-4DF8-C5A2-61FD79AC8035;model/iPhone11,1;addressid/7785283669;appBuild/167707;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/null;supportJDSHWK/1 】
 UserAgent = ''
@@ -44,59 +28,10 @@ ss = requests.session()
 
 pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 t = time.time()
-message_info = ''
-notify_mode = []
-
-# 获取TG_BOT_TOKEN
-if "TG_BOT_TOKEN" in os.environ:
-    if len(os.environ["TG_BOT_TOKEN"]) > 1:
-        TG_BOT_TOKEN = os.environ["TG_BOT_TOKEN"]
-        print("已获取并使用Env环境 TG_BOT_TOKEN")
-# 获取TG_USER_ID
-if "TG_USER_ID" in os.environ:
-    if len(os.environ["TG_USER_ID"]) > 1:
-        TG_USER_ID = os.environ["TG_USER_ID"]
-        print("已获取并使用Env环境 TG_USER_ID")
-# 获取代理ip
-if "TG_PROXY_IP" in os.environ:
-    if len(os.environ["TG_PROXY_IP"]) > 1:
-        TG_PROXY_IP = os.environ["TG_PROXY_IP"]
-        print("已获取并使用Env环境 TG_PROXY_IP")
-# 获取TG 代理端口
-if "TG_PROXY_PORT" in os.environ:
-    if len(os.environ["TG_PROXY_PORT"]) > 1:
-        TG_PROXY_PORT = os.environ["TG_PROXY_PORT"]
-        print("已获取并使用Env环境 TG_PROXY_PORT")
-    elif not TG_PROXY_PORT:
-        TG_PROXY_PORT = ''
-# 获取TG TG_API_HOST
-if "TG_API_HOST" in os.environ:
-    if len(os.environ["TG_API_HOST"]) > 1:
-        TG_API_HOST = os.environ["TG_API_HOST"]
-        print("已获取并使用Env环境 TG_API_HOST")
-# 获取pushplus+ PUSH_PLUS_TOKEN
-if "PUSH_PLUS_TOKEN" in os.environ:
-    if len(os.environ["PUSH_PLUS_TOKEN"]) > 1:
-        PUSH_PLUS_TOKEN = os.environ["PUSH_PLUS_TOKEN"]
-        print("已获取并使用Env环境 PUSH_PLUS_TOKEN")
-# 获取企业微信应用推送 QYWX_AM
-if "QYWX_AM" in os.environ:
-    if len(os.environ["QYWX_AM"]) > 1:
-        QYWX_AM = os.environ["QYWX_AM"]
-        print("已获取并使用Env环境 QYWX_AM")
-# Bark
-if "BARK" in os.environ:
-    if len(os.environ["BARK"]) > 1:
-        BARK = os.environ["BARK"]
-        print("已获取并使用Env环境 BARK")
-elif "BARK_PUSH" in os.environ:
-    if len(os.environ["BARK_PUSH"]) > 1:
-        BARK = os.environ["BARK_PUSH"]
-        print("已获取并使用Env环境 BARK_PUSH")
 
 
-def nowtime():
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+######## 获取通知模块
+message_info = ''''''
 
 
 def message(str_msg):
@@ -106,218 +41,14 @@ def message(str_msg):
     sys.stdout.flush()
 
 
-# 获取通知，
-if PUSH_PLUS_TOKEN:
-    notify_mode.append('pushplus')
-if TG_BOT_TOKEN and TG_USER_ID:
-    notify_mode.append('telegram_bot')
-if QYWX_AM:
-    notify_mode.append('wecom_app')
-if BARK:
-    notify_mode.append('bark')
-
-
-# tg通知
-def telegram_bot(title, content):
-    try:
-        print("\n")
-        bot_token = TG_BOT_TOKEN
-        user_id = TG_USER_ID
-        if not bot_token or not user_id:
-            print("tg服务的bot_token或者user_id未设置!!\n取消推送")
-            return
-        print("tg服务启动")
-        if TG_API_HOST:
-            url = f"{TG_API_HOST}/bot{TG_BOT_TOKEN}/sendMessage"
-        else:
-            url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
-
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        payload = {'chat_id': str(TG_USER_ID), 'text': f'{title}\n\n{content}', 'disable_web_page_preview': 'true'}
-        proxies = None
-        if TG_PROXY_IP and TG_PROXY_PORT:
-            proxyStr = "http://{}:{}".format(TG_PROXY_IP, TG_PROXY_PORT)
-            proxies = {"http": proxyStr, "https": proxyStr}
-        try:
-            response = requests.post(url=url, headers=headers, params=payload, proxies=proxies).json()
-        except:
-            print('推送失败！')
-        if response['ok']:
-            print('推送成功！')
-        else:
-            print('推送失败！')
-    except Exception as e:
-        print(e)
-
-
-# push推送
-def pushplus_bot(title, content):
-    try:
-        print("\n")
-        if not PUSH_PLUS_TOKEN:
-            print("PUSHPLUS服务的token未设置!!\n取消推送")
-            return
-        print("PUSHPLUS服务启动")
-        url = 'http://www.pushplus.plus/send'
-        data = {
-            "token": PUSH_PLUS_TOKEN,
-            "title": title,
-            "content": content
-        }
-        body = json.dumps(data).encode(encoding='utf-8')
-        headers = {'Content-Type': 'application/json'}
-        response = requests.post(url=url, data=body, headers=headers).json()
-        if response['code'] == 200:
-            print('推送成功！')
-        else:
-            print('推送失败！')
-    except Exception as e:
-        print(e)
-
-
-# BARK
-def bark_push(title, content):
-    print("\n")
-    if not BARK:
-        print("bark服务的bark_token未设置!!\n取消推送")
-        return
-    print("bark服务启动")
-    try:
-        response = requests.get('''https://api.day.app/{0}/{1}/{2}'''.format(BARK, title, quote_plus(content))).json()
-        if response['code'] == 200:
-            print('推送成功！')
-        else:
-            print('推送失败！')
-    except Exception as e:
-        print(e)
-        print('Bark推送失败！')
-
-
-def send(title, content):
-    """
-    使用 bark, telegram bot, dingding bot, serverJ 发送手机推送
-    :param title:
-    :param content:
-    :return:
-    """
-    content = content + "\n\n" + "仅供用于学习"
-    for i in notify_mode:
-
-        if i == 'telegram_bot':
-            if TG_BOT_TOKEN and TG_USER_ID:
-                telegram_bot(title=title, content=content)
-            else:
-                print('未启用 telegram机器人')
-            continue
-        elif i == 'pushplus':
-            if PUSH_PLUS_TOKEN:
-                pushplus_bot(title=title, content=content)
-            else:
-                print('未启用 PUSHPLUS机器人')
-            continue
-        elif i == 'wecom_app':
-            if QYWX_AM:
-                wecom_app(title=title, content=content)
-            else:
-                print('未启用企业微信应用消息推送')
-            continue
-        elif i == 'bark':
-            if BARK:
-                bark_push(title=title, content=content)
-            else:
-                print('未启用Bark APP应用消息推送')
-            continue
-        else:
-            print('此类推送方式不存在')
-
-
-# 企业微信 APP 推送
-def wecom_app(title, content):
-    try:
-        if not QYWX_AM:
-            print("QYWX_AM 并未设置！！\n取消推送")
-            return
-        QYWX_AM_AY = re.split(',', QYWX_AM)
-        if 4 < len(QYWX_AM_AY) > 5:
-            print("QYWX_AM 设置错误！！\n取消推送")
-            return
-        corpid = QYWX_AM_AY[0]
-        corpsecret = QYWX_AM_AY[1]
-        touser = QYWX_AM_AY[2]
-        agentid = QYWX_AM_AY[3]
-        try:
-            media_id = QYWX_AM_AY[4]
-        except:
-            media_id = ''
-        wx = WeCom(corpid, corpsecret, agentid)
-        # 如果没有配置 media_id 默认就以 text 方式发送
-        if not media_id:
-            message = title + '\n\n' + content
-            response = wx.send_text(message, touser)
-        else:
-            response = wx.send_mpnews(title, content, media_id, touser)
-        if response == 'ok':
-            print('推送成功！')
-        else:
-            print('推送失败！错误信息如下：\n', response)
-    except Exception as e:
-        print(e)
-
-
-class WeCom:
-    def __init__(self, corpid, corpsecret, agentid):
-        self.CORPID = corpid
-        self.CORPSECRET = corpsecret
-        self.AGENTID = agentid
-
-    def get_access_token(self):
-        url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken'
-        values = {'corpid': self.CORPID,
-                  'corpsecret': self.CORPSECRET,
-                  }
-        req = requests.post(url, params=values)
-        data = json.loads(req.text)
-        return data["access_token"]
-
-    def send_text(self, message, touser="@all"):
-        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + self.get_access_token()
-        send_values = {
-            "touser": touser,
-            "msgtype": "text",
-            "agentid": self.AGENTID,
-            "text": {
-                "content": message
-            },
-            "safe": "0"
-        }
-        send_msges = (bytes(json.dumps(send_values), 'utf-8'))
-        respone = requests.post(send_url, send_msges)
-        respone = respone.json()
-        return respone["errmsg"]
-
-    def send_mpnews(self, title, message, media_id, touser="@all"):
-        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + self.get_access_token()
-        send_values = {
-            "touser": touser,
-            "msgtype": "mpnews",
-            "agentid": self.AGENTID,
-            "mpnews": {
-                "articles": [
-                    {
-                        "title": title,
-                        "thumb_media_id": media_id,
-                        "author": "Author",
-                        "content_source_url": "",
-                        "content": message.replace('\n', '<br/>'),
-                        "digest": message
-                    }
-                ]
-            }
-        }
-        send_msges = (bytes(json.dumps(send_values), 'utf-8'))
-        respone = requests.post(send_url, send_msges)
-        respone = respone.json()
-        return respone["errmsg"]
+cur_path = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(cur_path)
+if os.path.exists(cur_path + "/sendNotify.py"):
+    from sendNotify import send
+else:
+    def send(title, content):
+        pass
+###################
 
 
 def userAgent():
