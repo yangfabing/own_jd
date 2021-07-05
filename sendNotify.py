@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
 
+import os
+import re
 import sys
-import os, re
-cur_path = os.path.abspath(os.path.dirname(__file__))
-root_path = os.path.split(cur_path)[0]
-sys.path.append(root_path)
 import requests
 import json
 import time
@@ -16,21 +14,26 @@ import urllib.parse
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
+
+cur_path = os.path.abspath(os.path.dirname(__file__))
+root_path = os.path.split(cur_path)[0]
+sys.path.append(root_path)
+
 # 通知服务
-BARK = ''                   # bark服务,自行搜索; secrets可填;
-BARK_HOST = ''              # bark服务，自搭建的host;secrets可填;
-SCKEY = ''                  # Server酱的SCKEY; secrets可填
-TG_BOT_TOKEN = ''           # tg机器人的TG_BOT_TOKEN; secrets可填1407203283:AAG9rt-6RDaaX0HBLZQq0laNOh898iFYaRQ
-TG_USER_ID = ''             # tg机器人的TG_USER_ID; secrets可填 1434078534
-TG_API_HOST=''              # tg 代理api
-TG_PROXY_IP = ''            # tg机器人的TG_PROXY_IP; secrets可填
-TG_PROXY_PORT = ''          # tg机器人的TG_PROXY_PORT; secrets可填
-DD_BOT_ACCESS_TOKEN = ''    # 钉钉机器人的DD_BOT_ACCESS_TOKEN; secrets可填
-DD_BOT_SECRET = ''          # 钉钉机器人的DD_BOT_SECRET; secrets可填
-QQ_SKEY = ''                # qq机器人的QQ_SKEY; secrets可填
-QQ_MODE = ''                # qq机器人的QQ_MODE; secrets可填
-QYWX_AM = ''                # 企业微信
-PUSH_PLUS_TOKEN = ''        # 微信推送Plus+
+BARK = ''  # bark服务,自行搜索; secrets可填;
+BARK_HOST = ''  # bark服务，自搭建的host;secrets可填;
+SCKEY = ''  # Server酱的SCKEY; secrets可填
+TG_BOT_TOKEN = ''  # tg机器人的TG_BOT_TOKEN; secrets可填1407203283:AAG9rt-6RDaaX0HBLZQq0laNOh898iFYaRQ
+TG_USER_ID = ''  # tg机器人的TG_USER_ID; secrets可填 1434078534
+TG_API_HOST = ''  # tg 代理api
+TG_PROXY_IP = ''  # tg机器人的TG_PROXY_IP; secrets可填
+TG_PROXY_PORT = ''  # tg机器人的TG_PROXY_PORT; secrets可填
+DD_BOT_ACCESS_TOKEN = ''  # 钉钉机器人的DD_BOT_ACCESS_TOKEN; secrets可填
+DD_BOT_SECRET = ''  # 钉钉机器人的DD_BOT_SECRET; secrets可填
+QQ_SKEY = ''  # qq机器人的QQ_SKEY; secrets可填
+QQ_MODE = ''  # qq机器人的QQ_MODE; secrets可填
+QYWX_AM = ''  # 企业微信
+PUSH_PLUS_TOKEN = ''  # 微信推送Plus+
 
 notify_mode = []
 
@@ -45,12 +48,14 @@ if "BARK_HOST" in os.environ and os.environ["BARK_HOST"]:
     BARK_HOST = os.environ['BARK_HOST']
 if "SCKEY" in os.environ and os.environ["SCKEY"]:
     SCKEY = os.environ["SCKEY"]
-if "TG_BOT_TOKEN" in os.environ and os.environ["TG_BOT_TOKEN"] and "TG_USER_ID" in os.environ and os.environ["TG_USER_ID"]:
+if "TG_BOT_TOKEN" in os.environ and os.environ["TG_BOT_TOKEN"] and "TG_USER_ID" in os.environ and os.environ[
+    "TG_USER_ID"]:
     TG_BOT_TOKEN = os.environ["TG_BOT_TOKEN"]
     TG_USER_ID = os.environ["TG_USER_ID"]
 if "TG_API_HOST" in os.environ and os.environ["TG_API_HOST"]:
     TG_API_HOST = os.environ["TG_API_HOST"]
-if "DD_BOT_ACCESS_TOKEN" in os.environ and os.environ["DD_BOT_ACCESS_TOKEN"] and "DD_BOT_SECRET" in os.environ and os.environ["DD_BOT_SECRET"]:
+if "DD_BOT_ACCESS_TOKEN" in os.environ and os.environ["DD_BOT_ACCESS_TOKEN"] and "DD_BOT_SECRET" in os.environ and \
+        os.environ["DD_BOT_SECRET"]:
     DD_BOT_ACCESS_TOKEN = os.environ["DD_BOT_ACCESS_TOKEN"]
     DD_BOT_SECRET = os.environ["DD_BOT_SECRET"]
 if "QQ_SKEY" in os.environ and os.environ["QQ_SKEY"] and "QQ_MODE" in os.environ and os.environ["QQ_MODE"]:
@@ -97,6 +102,7 @@ def message(str_msg):
     message_info = "{}\n{}".format(message_info, str_msg)
     sys.stdout.flush()
 
+
 def bark(title, content):
     print("\n")
     if not BARK:
@@ -116,6 +122,7 @@ def bark(title, content):
     except:
         print('推送失败！')
 
+
 def serverJ(title, content):
     print("\n")
     if not SCKEY:
@@ -131,6 +138,7 @@ def serverJ(title, content):
         print('推送成功！')
     else:
         print('推送失败！')
+
 
 # tg通知
 def telegram_bot(title, content):
@@ -164,6 +172,7 @@ def telegram_bot(title, content):
     except Exception as e:
         print(e)
 
+
 def dingding_bot(title, content):
     timestamp = str(round(time.time() * 1000))  # 时间戳
     secret_enc = DD_BOT_SECRET.encode('utf-8')
@@ -184,19 +193,21 @@ def dingding_bot(title, content):
     else:
         print('推送失败！')
 
+
 def coolpush_bot(title, content):
     print("\n")
     if not QQ_SKEY or not QQ_MODE:
         print("qq服务的QQ_SKEY或者QQ_MODE未设置!!\n取消推送")
         return
     print("qq服务启动")
-    url=f"https://qmsg.zendee.cn/{QQ_MODE}/{QQ_SKEY}"
+    url = f"https://qmsg.zendee.cn/{QQ_MODE}/{QQ_SKEY}"
     payload = {'msg': f"{title}\n\n{content}".encode('utf-8')}
     response = requests.post(url=url, params=payload).json()
     if response['code'] == 0:
         print('推送成功！')
     else:
         print('推送失败！')
+
 
 def pushplus_bot(title, content):
     print("\n")
@@ -211,12 +222,14 @@ def pushplus_bot(title, content):
         "content": content
     }
     body = json.dumps(data).encode(encoding='utf-8')
-    headers = {'Content-Type':'application/json'}
+    headers = {'Content-Type': 'application/json'}
     response = requests.post(url=url, data=body, headers=headers).json()
     if response['code'] == 200:
         print('推送成功！')
     else:
         print('推送失败！')
+
+
 # 企业微信 APP 推送
 def wecom_app(title, content):
     try:
@@ -248,6 +261,7 @@ def wecom_app(title, content):
             print('推送失败！错误信息如下：\n', response)
     except Exception as e:
         print(e)
+
 
 class WeCom:
     def __init__(self, corpid, corpsecret, agentid):
@@ -304,6 +318,7 @@ class WeCom:
         respone = respone.json()
         return respone["errmsg"]
 
+
 def send(title, content):
     """
     使用 bark, telegram bot, dingding bot, serverJ 发送手机推送
@@ -358,11 +373,12 @@ def send(title, content):
         else:
             print('此类推送方式不存在')
 
+
 def requests_session(
-    retries=3,
-    backoff_factor=0.3,
-    status_forcelist=(500, 502, 504),
-    session=None,
+        retries=3,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504),
+        session=None,
 ):
     session = session or requests.Session()
     retry = Retry(
@@ -371,13 +387,15 @@ def requests_session(
         connect=retries,
         backoff_factor=backoff_factor,
         status_forcelist=status_forcelist,
-        method_whitelist=frozenset(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'])  # urllib3 默认对除 GET 以外的方法，不设置自动重试功能，所以要主动添加白名单
+        method_whitelist=frozenset(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'])
+        # urllib3 默认对除 GET 以外的方法，不设置自动重试功能，所以要主动添加白名单
     )
     adapter = HTTPAdapter(max_retries=retry)
     session.mount('http://', adapter)
     session.mount('https://', adapter)
 
     return session
+
 
 def main():
     send('title', 'content')
