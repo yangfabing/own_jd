@@ -16,7 +16,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 const randomCount = $.isNode() ? 20 : 5;
 $.accountCheck = true;
 $.init = false;
-// const bean = 1; //兑换多少豆，默认是500
+const bean = 500; //兑换多少豆，默认是500
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message, helpInfo, ADD_CART = false;
 
@@ -477,23 +477,23 @@ async function mr() {
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
               console.log(`benefit:${JSON.stringify(benefit)}`);
-              if(benefit.description === "1 京豆" &&   //500颗京豆打包兑换
-                  parseInt(benefit.day_exchange_count) < 10 &&
-                  $.total > benefit.coins){
-                for (let i = benefit.day_exchange_count; i < 10; i++){
-                  // console.log(`开始兑换`)
-                  client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`);
-                  await $.wait(1000);
-                }
-              }
-              // console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
-              // if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
-              //   $.total > benefit.coins &&
-              //   parseInt(benefit.day_exchange_count) < benefit.day_limit) {
-              //   console.log(`满足条件，去兑换`)
-              //   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
-              //   await $.wait(1000)
+              // if(benefit.description === "1 京豆" &&   //500颗京豆打包兑换
+              //     parseInt(benefit.day_exchange_count) < 10 &&
+              //     $.total > benefit.coins){
+              //   for (let i = benefit.day_exchange_count; i < 10; i++){
+              //     // console.log(`开始兑换`)
+              //     client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`);
+              //     await $.wait(1000);
+              //   }
               // }
+              console.log(`物品【${benefit.description}】需要${benefit.coins}美妆币，库存${benefit.stock}份`)
+              if (parseInt(benefit.setting.beans_count) === bean && //兑换多少豆 bean500就500豆
+                $.total > benefit.coins &&
+                parseInt(benefit.day_exchange_count) < benefit.day_limit) {
+                console.log(`满足条件，去兑换`)
+                client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
+                await $.wait(1000)
+              }
             }
           }
           break
