@@ -20,7 +20,7 @@ let useInfo = {};
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let newShareCodes = [];
-let lsjdh = 'jdAward4';
+let lsjdh = '';
 if (process.env.lsjdh) {
   lsjdh = process.env.lsjdh;
 }
@@ -113,13 +113,15 @@ await doliulan(3)
 //await gettask()  
 
 $.log("开始浏览会场")
+await doshop(1000014803)
+await $.wait(3000)
 await doshop(10299171)
 await $.wait(3000)
 await doshop(1000077335)
 await $.wait(3000)
 await doshop(1000008814)
 await $.wait(3000)
-await doshop(1000014803)
+await doshop(1000101562)
 $.log("开始浏览推荐食品商品")
 await doGoods(1)
 await $.wait(3000)

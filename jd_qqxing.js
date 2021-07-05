@@ -2,7 +2,7 @@
 星系牧场
 活动入口：QQ星儿童牛奶京东自营旗舰店->星系牧场
 每次都要手动打开才能跑 不知道啥问题
-号1默认给我助力,后续接龙 2给1 3给2
+无内置助力
  19.0复制整段话 http:/J7ldD7ToqMhRJI星系牧场养牛牛，可获得DHA专属奶！%VAjYb8me2b!→去猄倲←
 [task_local]
 #星系牧场
@@ -30,7 +30,7 @@ if ($.isNode()) {
 
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
-$.shareuuid = "5e81094ee1d640b2996883b48d0c410a"
+$.shareuuid = "df20c57134084b92b0b87d45de6d1a75"
     !(async () => {
         if (!cookiesArr[0]) {
             $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
@@ -122,7 +122,7 @@ $.shareuuid = "5e81094ee1d640b2996883b48d0c410a"
 // 更新cookie 
 
 function updateCookie (resp) {
-    if (!resp?.headers['set-cookie']){
+    if (!resp.headers['set-cookie']){
         return
     }
     let obj = {}
@@ -222,7 +222,7 @@ function getToken2() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     data = JSON.parse(data);
-                    console.log(data)
+                    // console.log(data)
                     $.token2 = data['token']
                     //     console.log($.token2)
                 }
@@ -400,7 +400,6 @@ function getUid() {
                            if(data.data.openCardStatus !=3){
                            console.log("当前未开卡,无法助力和兑换奖励哦")
                            }                           
-                            // $.shareuuid = data.data.uid                            
                             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.shareuuid}\n`);
                         }
                       }
