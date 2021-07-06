@@ -25,7 +25,7 @@ let cookiesArr = [], cookie = '', message;
 let codeList = []
 let codeList1 = []
 
-let joyinviterPin = '';
+let joyinviterPin = 's8eBfWx9FuuXgZbuDC_vwA';
 if (process.env.joyinviterPin) {
   joyinviterPin = process.env.joyinviterPin;
 }
