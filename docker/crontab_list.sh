@@ -172,5 +172,6 @@
 15 */4 * * * python3 /scripts/jd_cashHelp.py >> /scripts/logs/jd_cashHelp.log 2>&1
 #来客有礼-送豆得豆
 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
-
+#移动
+30 8 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
 
