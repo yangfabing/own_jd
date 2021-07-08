@@ -175,3 +175,7 @@
 #移动
 30 8 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
 
+20 0-23/3 *** node /scripts/jd_joypark_joy.js >> /scripts/logs/jd_joypark_joy.log 2>&1
+
+
+
