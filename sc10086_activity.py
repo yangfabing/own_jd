@@ -107,7 +107,7 @@ def do_sign(ck, sso_cookie):
     }
     resp = ss.post(url=url, headers=header, data=body).json()
     result = resp['result']
-    message(resp)
+    print(resp)
     if result['code'] == 0:
         message("签到成功")
     else:
@@ -121,7 +121,7 @@ def sign_draw(sso_cookie):
         'SSOCookie': sso_cookie
     }
     resp = ss.post(url=url, data=body).json()
-    message(resp)
+    print(resp)
     result = resp['result']
     if result['code'] == 0:
         message('获取宝箱信息成功')
@@ -140,7 +140,7 @@ def sign_draw(sso_cookie):
                 'type': f_type
             }
             resp = ss.post(url=url, data=body).json()
-            message(resp)
+            print(resp)
             result = resp['result']
             if result['code'] == 0:
                 message("开宝箱成功")
