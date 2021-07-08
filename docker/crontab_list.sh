@@ -177,5 +177,6 @@
 
 20 0-23/3 *** node /scripts/jd_joypark_joy.js >> /scripts/logs/jd_joypark_joy.log 2>&1
 
+12 9,11,13,15,17 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
 
 
