@@ -176,9 +176,9 @@
 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
 #移动
 30 8 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
-
+#汪汪乐园合成
 20 0-23/3 *** node /scripts/jd_joypark_joy.js >> /scripts/logs/jd_joypark_joy.log 2>&1
-
-12 9,11,13,15,17 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
+#燃动夏季
+25 0,6-23/2 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
 
 
