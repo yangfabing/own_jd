@@ -161,7 +161,7 @@
 #全民抢京豆
 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
 #众筹许愿池
-4 0 * * * python3 /scripts/jd_zcxyc.py >> /scripts/logs/jd_zcxyc.log 2>&1
+4 0 * * * ts-node /scripts/jd_wishingPool.ts >> /scripts/logs/jd_wishingPool.log 2>&1
 #早起领福利
 4 0 * * * python3 /scripts/jd_zqfl.py >> /scripts/logs/jd_zqfl.log 2>&1
 # 签到领现金-助力
@@ -171,7 +171,9 @@
 #移动
 30 8 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
 #汪汪乐园合成
-20 0-23/3 *** node /scripts/jd_joypark_joy.js >> /scripts/logs/jd_joypark_joy.log 2>&1
+20 0-23/3 * * * node /scripts/jd_joypark_joy.js >> /scripts/logs/jd_joypark_joy.log 2>&1
+#汪汪乐园任务
+20 3 * * * ts-node /scripts/jd_joy_park.ts >> /scripts/logs/jd_joy_park.log 2>&1
 #燃动夏季
 25 0,6-23/2 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
 #签到图形验证码
