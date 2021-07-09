@@ -138,8 +138,8 @@ def sign_draw(sso_cookie):
 
     message('开始开宝箱...')
     for info in draw_infos:
-        time.sleep(5)
         if info['IS_SIGN_FLAG'] == 'Y-DRAWING' and info['IS_DRAW'] == 'N':
+            time.sleep(5)
             f_type = info['F_TYPE']
             url = 'https://wap.sc.10086.cn/scmccCampaign/signCalendar/drawNew.do'
             body = {
@@ -201,10 +201,6 @@ def epncup_draw(sso_cookie):
         task_id = user_cnt['taskid'].split(',')
         complete_task = user_cnt['completeTaskId'].split(',')
         count = user_cnt['count']
-        for task in complete_task:
-            if task_id.index(task) >= 0:
-                task_id.remove(task)
-
     else:
         print(resp['result']['info'])
 
@@ -332,7 +328,7 @@ def do_active_kaquan(sso_cookie):
         body = {
             'type': 1,
             'SSOCookie': sso_cookie,
-            'parms': kq,
+            'parms': kq
         }
         resp = ss.post(url=url, data=body).text
         print(resp)
