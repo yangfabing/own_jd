@@ -47,18 +47,22 @@ else:
 
 gifs = []
 
+
 def start():
     message(f"一共【{len(cookies)}】个账号")
     # 先熊掌门相互助力
+    message("熊掌门邀请好友相互助力...")
     for ck in cookies:
+        message(f"第【{cookies.index(ck)+1}】个账号给其他账号助力")
         sso_cookie = sso_cookies[cookies.index(ck)]
         for share_phone in sso_cookies:
             time.sleep(1)
             help_draw(ck, sso_cookie, share_phone)
 
+    message("熊掌门邀请好友相互助力完成")
     time.sleep(1)
     for ck in cookies:
-        message(f"开始任务：第【{cookies.index(ck)+1}】个账号")
+        message(f"第【{cookies.index(ck)+1}】个账号开始做任务")
         sso_cookie = sso_cookies[cookies.index(ck)]
         # 签到
         do_sign(ck, sso_cookie)
@@ -71,6 +75,8 @@ def start():
         time.sleep(1)
         # 足球欧洲杯抽奖
         epncup_draw(sso_cookie)
+        time.sleep(1)
+        do_active_kaquan(sso_cookie)
         time.sleep(1)
         share_phone, month = do_draw_gif(sso_cookie)
 
@@ -144,7 +150,6 @@ def sign_draw(sso_cookie):
             result = resp['result']
             if result['code'] == 0:
                 message("开宝箱成功")
-                obj = result['obj']
             else:
                 message(f"开宝箱失败,{result['info']}")
             time.sleep(1)
@@ -153,34 +158,89 @@ def sign_draw(sso_cookie):
 
 
 def xzm_draw(sso_cookie):
-    print("开始熊掌门转转转...")
-    url = 'https://wap.sc.10086.cn/scmccCampaign/dzp2020/Draw.do'
-    body = {
-        'SSOCookie': sso_cookie,
-        'canals': 'zt1'
-    }
-    resp = ss.post(url=url, data=body).json()
-    message(resp)
-
-
-def epncup_draw(sso_cookie):
-    print("足球欧洲杯抽奖")
-    url = 'https://wap.sc.10086.cn/scmccCampaign/epncup/doDraw.do'
+    message("熊掌门转转转...")
+    url = 'https://wap.sc.10086.cn/scmccCampaign/dzp2020/init.do'
     body = {
         'SSOCookie': sso_cookie,
         'canals': 'zt1'
     }
     resp = ss.post(url=url, data=body).json()
     print(resp)
-    if resp['result']['code'] == 0:
-        message("足球欧洲杯抽奖，中奖了")
-        message(f"{resp['result']['obj']['name']}")
+    countlist = resp['result']['obj']['countlist']
+    count = 0
+    for dic in countlist:
+        count = count + dic['count']
+    print(f"一共{count}次抽奖机会")
+
+    if count <= 0:
+        return
+
+    for i in range(count):
+        time.sleep(1)
+        print(f"开始第{i+1}次抽奖")
+        url = 'https://wap.sc.10086.cn/scmccCampaign/dzp2020/Draw.do'
+        body = {
+            'SSOCookie': sso_cookie,
+            'canals': 'zt1'
+        }
+        resp = ss.post(url=url, data=body).json()
+        print(resp)
+
+
+def epncup_draw(sso_cookie):
+    message("足球欧洲杯抽奖")
+    url = 'https://wap.sc.10086.cn/scmccCampaign/epncup/initPage.do'
+    body = {
+        'SSOCookie': sso_cookie
+    }
+    resp = ss.post(url=url, data=body).json()
+    print(resp)
+    count = 0
+    if resp['code'] == 0:
+        user_cnt = resp['result']['obj']['userCnt']
+        task_id = user_cnt['taskid'].split(',')
+        complete_task = user_cnt['completeTaskId'].split(',')
+        count = user_cnt['count']
+        for task in complete_task:
+            task_id.remove(task)
     else:
-        message(f"{resp['result']['info']}")
+        print(resp['info'])
+
+    for task in task_id:
+        time.sleep(1)
+        print(f"开始做任务:【{task}】")
+        url = 'https://wap.sc.10086.cn/scmccCampaign/epncup/reportTask.do'
+        body = {
+            'SSOCookie': sso_cookie,
+            'canals': 'zt1',
+            'taskId': task
+        }
+        resp = ss.post(url=url, data=body).json()
+        print(resp)
+        message(resp['result']['info'])
+        if resp['result']['code'] == 0:
+            count = count + 1
+
+    if count <= 0:
+        return
+
+    for i in range(count):
+        time.sleep(1)
+        print(f"开始第{i+1}次抽奖")
+        url = 'https://wap.sc.10086.cn/scmccCampaign/epncup/doDraw.do'
+        body = {
+            'SSOCookie': sso_cookie,
+            'canals': 'zt1'
+        }
+        resp = ss.post(url=url, data=body).json()
+        print(resp)
+        if resp['result']['code'] == 0:
+            message(f"{resp['result']['obj']['name']}")
+        else:
+            message(f"{resp['result']['info']}")
 
 
 def help_draw(ck, sso_cookie, share_phone):
-    print("熊掌门助力好友抽奖")
     url = 'https://wap.sc.10086.cn/scmccCampaign/dzp2020help/helpDraw.do'
     header = {
             'XMLHttpRequest': 'XMLHttpRequest',
@@ -220,7 +280,7 @@ def do_draw_gif(sso_cookie):
     bytes_url = jump_url.encode("utf-8")
     share_url = f"http://wap.sc.10086.cn/scmccCampaign/oneVip/share.html?s={share_phone}&m={month}&jumpUrl={base64.b64encode(bytes_url).decode()}"
     message(f"生成大礼包url成功")
-    message(share_url)
+    print(share_url)
     return share_phone, month
 
 
@@ -248,6 +308,31 @@ def draw_gif_ticket(ck, sso_cookie):
             'm': month
         }
         resp = ss.post(url=url, headers=header, data=body).json()
+        print(resp)
+
+
+def do_active_kaquan(sso_cookie):
+    print("查询卡券列表")
+    url = 'https://wap.sc.10086.cn/scmccClient/fusionCardCoupons.do'
+    body = {
+        'SSOCookie': sso_cookie,
+        'type': 2
+    }
+    resp = ss.post(url=url, data=body).text
+    result = base64.b64decode(resp)
+    result = json.loads(result.decode())
+    print(result)
+    kq_list = result['retObj']['ZTList']
+    for kq in kq_list:
+        print(f"开始兑换{kq['cardName']},{kq['cardAmount']}")
+        time.sleep(1)
+        url = 'https://wap.sc.10086.cn/scmccClient/fusionCardCoupons.do'
+        body = {
+            'type': 1,
+            'SSOCookie': sso_cookie,
+            'parms': kq,
+        }
+        resp = ss.post(url=url, data=body).text
         print(resp)
 
 
