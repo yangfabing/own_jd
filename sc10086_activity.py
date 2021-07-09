@@ -328,9 +328,9 @@ def do_active_kaquan(sso_cookie):
         body = {
             'type': 1,
             'SSOCookie': sso_cookie,
-            'parms': kq
+            'parms': json.dumps(kq)
         }
-        resp = ss.post(url=url, data=body).text
+        resp = ss.post(url=url, data=body).json()
         print(resp)
 
 
