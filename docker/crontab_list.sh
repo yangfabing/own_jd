@@ -176,5 +176,6 @@
 25 0,6-23/2 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
 #签到图形验证码
 25 2,16 * * * node /scripts/js_sign.js >> /scripts/logs/js_sign.log 2>&1
-
+#燃动夏季领店铺任务
+7 10,20 * * * node /scripts/jd_summer_movement_map.js >> /scripts/logs/jd_summer_movement_map.log 2>&1
 
