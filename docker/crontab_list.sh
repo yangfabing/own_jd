@@ -167,7 +167,7 @@
 #来客有礼-送豆得豆
 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
 #移动
-30 8 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
+30 10,17 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
 #汪汪乐园任务
 20 3 * * * node /scripts/js_joy_park_task.js >> /scripts/logs/js_joy_park_task.log 2>&1
 #汪汪乐园合成
