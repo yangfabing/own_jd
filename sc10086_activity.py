@@ -196,7 +196,7 @@ def epncup_draw(sso_cookie):
     resp = ss.post(url=url, data=body).json()
     print(resp)
     count = 0
-    if resp['code'] == 0:
+    if resp['result']['code'] == 0:
         user_cnt = resp['result']['obj']['userCnt']
         task_id = user_cnt['taskid'].split(',')
         complete_task = user_cnt['completeTaskId'].split(',')
@@ -204,7 +204,7 @@ def epncup_draw(sso_cookie):
         for task in complete_task:
             task_id.remove(task)
     else:
-        print(resp['info'])
+        print(resp['result']['info'])
 
     for task in task_id:
         time.sleep(1)
