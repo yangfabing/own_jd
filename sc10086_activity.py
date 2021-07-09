@@ -138,6 +138,7 @@ def sign_draw(sso_cookie):
 
     message('开始开宝箱...')
     for info in draw_infos:
+        time.sleep(5)
         if info['IS_SIGN_FLAG'] == 'Y-DRAWING' and info['IS_DRAW'] == 'N':
             f_type = info['F_TYPE']
             url = 'https://wap.sc.10086.cn/scmccCampaign/signCalendar/drawNew.do'
@@ -152,7 +153,6 @@ def sign_draw(sso_cookie):
                 message("开宝箱成功")
             else:
                 message(f"开宝箱失败,{result['info']}")
-            time.sleep(1)
 
     message('开宝箱完成')
 
@@ -176,7 +176,7 @@ def xzm_draw(sso_cookie):
         return
 
     for i in range(count):
-        time.sleep(1)
+        time.sleep(10)
         print(f"开始第{i+1}次抽奖")
         url = 'https://wap.sc.10086.cn/scmccCampaign/dzp2020/Draw.do'
         body = {
@@ -202,12 +202,14 @@ def epncup_draw(sso_cookie):
         complete_task = user_cnt['completeTaskId'].split(',')
         count = user_cnt['count']
         for task in complete_task:
-            task_id.remove(task)
+            if task_id.index(task) >= 0:
+                task_id.remove(task)
+
     else:
         print(resp['result']['info'])
 
     for task in task_id:
-        time.sleep(1)
+        time.sleep(10)
         print(f"开始做任务:【{task}】")
         url = 'https://wap.sc.10086.cn/scmccCampaign/epncup/reportTask.do'
         body = {
@@ -325,7 +327,7 @@ def do_active_kaquan(sso_cookie):
     kq_list = result['retObj']['ZTList']
     for kq in kq_list:
         print(f"开始兑换{kq['cardName']},{kq['cardAmount']}")
-        time.sleep(1)
+        time.sleep(5)
         url = 'https://wap.sc.10086.cn/scmccClient/fusionCardCoupons.do'
         body = {
             'type': 1,
