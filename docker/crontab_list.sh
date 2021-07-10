@@ -157,7 +157,7 @@
 #微信小程序-赚京豆-瓜分京豆python版
 0 0 * * * python3 /scripts/jd_zjd.py >> /scripts/logs/jd_zjd.log 2>&1
 #全民抢京豆
-3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
+# 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
 #众筹许愿池
 4 0 * * * ts-node /scripts/jd_wishingPool.ts >> /scripts/logs/jd_wishingPool.log 2>&1
 #早起领福利
@@ -165,17 +165,17 @@
 # 签到领现金-助力
 15 */4 * * * python3 /scripts/jd_cashHelp.py >> /scripts/logs/jd_cashHelp.log 2>&1
 #来客有礼-送豆得豆
-45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
+# 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
 #移动
 30 10,17 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
 #汪汪乐园任务
-20 3 * * * node /scripts/js_joy_park_task.js >> /scripts/logs/js_joy_park_task.log 2>&1
+20 3 * * * node /scripts/jd_joy_park_task.js >> /scripts/logs/jd_joy_park_task.log 2>&1
 #汪汪乐园合成
 20 0-23/3 * * * node /scripts/jd_joy_park.js >> /scripts/logs/jd_joy_park.log 2>&1
 #燃动夏季
 25 0,6-23/2 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
 #签到图形验证码
-25 2,16 * * * node /scripts/js_sign.js >> /scripts/logs/js_sign.log 2>&1
+25 2,16 * * * node /scripts/jd_sign.js >> /scripts/logs/jd_sign.log 2>&1
 #燃动夏季领店铺任务
 7 10,20 * * * node /scripts/jd_summer_movement_map.js >> /scripts/logs/jd_summer_movement_map.log 2>&1
 
