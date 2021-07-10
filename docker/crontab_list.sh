@@ -168,14 +168,17 @@
 # 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
 #移动
 30 10,17 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
+#签到图形验证码
+25 2,16 * * * node /scripts/jd_sign.js >> /scripts/logs/jd_sign.log 2>&1
 #汪汪乐园任务
 20 3 * * * node /scripts/jd_joy_park_task.js >> /scripts/logs/jd_joy_park_task.log 2>&1
 #汪汪乐园合成
 20 0-23/3 * * * node /scripts/jd_joy_park.js >> /scripts/logs/jd_joy_park.log 2>&1
 #燃动夏季
 25 0,6-23/2 * * * node /scripts/jd_summer_movement.js >> /scripts/logs/jd_summer_movement.log 2>&1
-#签到图形验证码
-25 2,16 * * * node /scripts/jd_sign.js >> /scripts/logs/jd_sign.log 2>&1
 #燃动夏季领店铺任务
 7 10,20 * * * node /scripts/jd_summer_movement_map.js >> /scripts/logs/jd_summer_movement_map.log 2>&1
-
+#燃动夏季下注
+11 12,20 * * * node /scripts/jd_summer_movement_bet.js >> /scripts/logs/jd_summer_movement_bet.log 2>&1
+#燃动夏季互助
+12 7-14 * * * node /scripts/jd_summer_movement_help.js >> /scripts/logs/jd_summer_movement_help.log 2>&1
