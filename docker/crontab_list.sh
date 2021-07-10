@@ -168,6 +168,8 @@
 # 45 4 * * * node /scripts/jd_senbeans.js >> /scripts/logs/jd_senbeans.log 2>&1
 #移动
 30 10,17 * * * python3 /scripts/sc10086_activity.py >> /scripts/logs/sc10086_activity.log 2>&1
+#北京现代签到、任务
+30 9,16 * * * python3 /scripts/bm2_sign.py >> /scripts/logs/bm2_sign.log 2>&1
 #签到图形验证码
 25 2,16 * * * node /scripts/jd_sign.js >> /scripts/logs/jd_sign.log 2>&1
 #汪汪乐园任务
