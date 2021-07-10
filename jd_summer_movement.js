@@ -17,7 +17,7 @@ const { R_OK } = require('fs').constants;
 const vm = require('vm');
 let smashUtils;
 
-let summer_movement_joinjoinjoinhui = false;//是否入会  true 入会，false 不入会
+let summer_movement_joinjoinjoinhui = true;//是否入会  true 入会，false 不入会
 if ($.isNode() && process.env.summer_movement_joinjoinjoinhui) {
   summer_movement_joinjoinjoinhui = process.env.summer_movement_joinjoinjoinhui;
 }
@@ -42,7 +42,9 @@ $.innerShInviteList = [
   'H8mphLbwLg_xLIKcQ9I30BOoZKpsdike',//zero205：我的互助码，加在smiek2221大佬后面
   'H8mphLbwLg2gd4rIQoEz19OIROyGRmqQ',
   'H8mphLbwLgz2ftDOEtQx1Yp-v5_fkMS_',
-  'H8mphO2nRAmleYWfHtA0uY-QzpCd'
+  'H8mphO2nRAmleYWfHtA0uY-QzpCd',
+  'HcmphO2nRgOneIGSFLtumqgH2R32UHKgwtHpg9bS6yl6ofzTSd3r8ekjnbTGg7wIbZKGFg',
+  'HcmphLbwLgyrd9afF9Az0yXdIpGsIH90m6IvEX66BnzRI0JohcmtabIeYo9l3KyJayiFkwjebwqIZhct8g69pQ'
 ];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
