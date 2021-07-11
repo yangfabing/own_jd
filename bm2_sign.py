@@ -36,13 +36,15 @@ comments = [
     '我是现代的粉丝，以后还买现代车'
 ]
 
+today_answer = ''
+
 
 def start():
     for tk in tokens:
         do_sign(tk)
         do_scan_score(tk)
-        do_comment(tk)
         do_answer(tk)
+        do_comment(tk)
 
 
 def do_sign(tk):
@@ -101,7 +103,6 @@ def do_sign(tk):
 
 def do_scan_score(tk):
     try:
-
         message("浏览得积分")
         url = 'https://bm2-api.bluemembers.com.cn/v1/app/score'
         header = {
@@ -130,9 +131,8 @@ def do_scan_score(tk):
         print(e)
 
 
-def do_comment(tk, ):
+def do_comment(tk):
     try:
-
         url = 'https://bm2-api.bluemembers.com.cn/v1/app/comment/create2'
         header = {
             'Accept': 'application/json, text/plain, */*',
@@ -147,7 +147,7 @@ def do_comment(tk, ):
             'Origin-Id': 'D25BD59F-75AC-4D70-AE10-3DB6C4173858',
             'Content-Type': 'application/json;charset=utf-8'
         }
-        comment = random.choice(comments)
+        comment = random.choice(comments) + '\n' + f'今日答案：{today_answer}'
         body = {
             'category': 4,
             'info_hid': '1f12a40e0cc6461db3aec81c8479df6e',
@@ -197,9 +197,30 @@ def do_answer(tk):
                 content = question_info['content']
                 options = question_info['option']
                 # 随机选择一个答题选项
-                option = random.choice(options)['option']
+                answer = random.choice(options)['option']
+
+                # 从评论列表中识别出答案
+                tmp_option_map = {
+                }
+                for option in options:
+                    tmp_option_map[option['option']] = 0
+
+                comment_contents = get_comment_list(tk)
+                for content in comment_contents:
+                    for op in tmp_option_map.keys():
+                        if content.upper().find(op) >= 0:
+                            tmp_option_map[op] = tmp_option_map[op] + 1
+
+                max_count = 0
+                for key, value in tmp_option_map.items():
+                    if value > max_count:
+                        answer = key
+                        max_count = value
+
+                global today_answer
+                today_answer = answer
                 body = {
-                    'answer': option,
+                    'answer': answer,
                     'questions_hid': questions_hid
                 }
                 resp = ss.post(url=url, headers=header, json=body).json()
@@ -208,8 +229,10 @@ def do_answer(tk):
                     message(resp['data']['answer'])
                     if resp['data']['state'] == 2:
                         message("答题正确")
+                        today_answer = answer
                     else:
                         message("答题错误")
+                        today_answer = ''
                 else:
                     message(resp['info'])
             else:
@@ -218,6 +241,41 @@ def do_answer(tk):
             message(resp['msg'])
     except Exception as e:
         print(e)
+
+
+def get_comment_list(tk):
+    try:
+        message("获取评论列表，用于识别出今日答案")
+        url = 'https://bm2-api.bluemembers.com.cn/v1/app/white/comment/new_list?category=4&info_hid=1f12a40e0cc6461db3aec81c8479df6e&page_no=1&page_size=80'
+        header = {
+            'Accept': 'application/json, text/plain, */*',
+            'App-Version': '7.8.3',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Token': tk,
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148bjxd',
+            'Connection': 'keep-alive',
+            'Referer': 'https://bm2-wx.bluemembers.com.cn/app/lottery',
+            'Device': 'iOS',
+            'Origin-Id': 'D25BD59F-75AC-4D70-AE10-3DB6C4173858',
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+        resp = ss.get(url=url, headers=header).json()
+        print(resp)
+        if resp['code'] == 0:
+            c_list = resp['data']['list']
+            now = time.strftime("%Y-%m-%d", time.localtime())
+            contents = []
+            for comment in c_list:
+                if comment['created_at'].startswith(now):
+                    contents.append(comment['content'])
+
+            return contents
+        else:
+            return []
+    except Exception as e:
+        print(e)
+        return []
 
 
 if __name__ == '__main__':
