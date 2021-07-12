@@ -2,7 +2,7 @@
 
 https://wbbny.m.jd.com/babelDiy/Zeus/2rtpffK8wqNyPBH6wyUDuBKoAbCt/index.html
 
-cron 12 7-14 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement_help.js
+cron 14/41 7-14 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_summer_movement_help.js
 
 */
 
@@ -13,7 +13,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const https = require('https');
-const fs = require('fs').promises;
+const fs = require('fs/promises');
 const { R_OK } = require('fs').constants;
 const vm = require('vm');
 let smashUtils;
@@ -30,13 +30,6 @@ $.cookie = '';
 $.secretpInfo = {};
 $.ShInviteList = [];
 $.innerShInviteList = [
-  'H8mphLbwLgz3e4GeFdc0g9GS9KyvaS3S',
-  'H8mphLbwLn_LHtvAULB0thOUapqKwhU',
-  'H8mphLbwLnPnJ8L9XqdUv7O1wfsqrXQ',
-  'H8mphLbwLg_xLIKcQ9I30BOoZKpsdike',//zero205：我的互助码，加在smiek2221大佬后面
-  'H8mphLbwLg2gd4rIQoEz19OIROyGRmqQ',
-  'H8mphLbwLgz2ftDOEtQx1Yp-v5_fkMS_',
-  'H8mphO2nRAmleYWfHtA0uY-QzpCd'
 ];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -61,7 +54,7 @@ const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT :
       '本脚本只助力SH\n' +
       '百元守卫战 开启时间早上8点过后\n' +
       '活动时间：2021-07-08至2021-08-08\n' +
-      '脚本更新时间：2021年7月10日 02点00分\n'
+      '脚本更新时间：2021年7月12日 09点00分\n'
       );
       if(Number(summer_movement_ShHelpFlag) === 1){
         console.log('您设置了 【百元守卫战SH】✅ || 互助✅')
@@ -87,12 +80,23 @@ const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT :
       if($.hotFlag)$.secretpInfo[$.UserName] = false;//火爆账号不执行助力
     }
   }
-
   // 助力
-  let res = [];
+  let res = [], res2 = [];
+  $.innerShInviteList = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement_one.json');
+  res2 = await getAuthorShareCode('https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
+  if(!$.innerShInviteList[0]){
+    $.innerShInviteList = await getAuthorShareCode('https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
+  }
+  if(!res2[0]){
+    res2 = await getAuthorShareCode('https://ghproxy.com/https://raw.githubusercontent.com/smiek2221/updateTeam/master/shareCodes/summer_movement.json');
+  }
+  $.ShInviteLists = []
+  $.ShInviteLists = []
   if (ShHelpAuthorFlag) {
-    $.innerShInviteList = getRandomArrayElements([...$.innerShInviteList, ...res], [...$.innerShInviteList, ...res].length);
-    $.ShInviteList.push(...$.innerShInviteList);
+    $.innerShInviteLists = getRandomArrayElements([...res, ...res2], [...res, ...res2].length);
+    $.ShInviteLists.push(...$.ShInviteList,...$.innerShInviteList,...$.innerShInviteLists);
+  }else{
+    $.ShInviteLists.push(...$.ShInviteList);
   }
   for (let i = 0; i < cookiesArr.length; i++) {
     $.cookie = cookiesArr[i];
@@ -105,13 +109,18 @@ const UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT :
     $.index = i + 1;
     if (new Date().getUTCHours() + 8 >= 8) {
       if(Number(summer_movement_ShHelpFlag) === 1){
-        if ($.ShInviteList && $.ShInviteList.length) console.log(`\n******开始内部京东账号【百元守卫战SH】助力*********\n`);
-        for (let i = 0; i < $.ShInviteList.length && $.canHelp; i++) {
-          console.log(`${$.UserName} 去助力SH码 ${$.ShInviteList[i]}`);
-          $.inviteId = $.ShInviteList[i];
-          await takePostRequest('shHelp');
-          await $.wait(1000);
+        if ($.ShInviteLists && $.ShInviteLists.length) console.log(`\n******开始内部京东账号【百元守卫战SH】助力*********\n`);
+        for (let i = 0; i < $.ShInviteLists.length && $.canHelp; i++) {
+          if(typeof $.ShInviteLists[i] === 'string'){
+            console.log(`${$.UserName} 去助力SH码 ${$.ShInviteLists[i]}`);
+            $.inviteId = $.ShInviteLists[i];
+            await takePostRequest('shHelp');
+            await $.wait(1000);
+          }
         }
+        $.ShInviteLists = []
+        $.innerShInviteLists = getRandomArrayElements([...res, ...res2], [...res, ...res2].length);
+        $.ShInviteLists.push(...$.ShInviteList,...$.innerShInviteList,...$.innerShInviteLists);
       }
       $.canHelp = true;
     }
@@ -135,6 +144,7 @@ async function movement() {
     $.taskList = [];
     $.shopSign = ``;
     $.userInfo = ''
+    $.hundred = false
     if (new Date().getUTCHours() + 8 >= 8) {
       console.log('\n百元守卫战')
       if(Number(summer_movement_ShHelpFlag) === 1 || Number(summer_movement_ShHelpFlag) === 2){
@@ -148,7 +158,7 @@ async function movement() {
         }
       }
     }else{
-      console.log('\n百元守卫战开启时间还没到')
+      console.log('\n未开启百元守卫战')
     }
     
   } catch (e) {
@@ -160,6 +170,10 @@ async function takePostRequest(type) {
   let body = ``;
   let myRequest = ``;
   switch (type) {
+    case 'olympicgames_home':
+      body = `functionId=olympicgames_home&body={}&client=wh5&clientVersion=1.0.0&appid=${$.appid}`;
+      myRequest = await getPostRequest(`olympicgames_home`, body);
+      break;
     case 'olympicgames_receiveCash':
       let id = 6
       if ($.Shend) id = 4
@@ -203,6 +217,18 @@ async function dealReturn(type, res) {
     return;
   }
   switch (type) {
+    case 'olympicgames_home':
+    if (data.code === 0 && data.data && data.data.result) {
+        if (data.data['bizCode'] === 0) {
+          $.homeData = data.data;
+          $.secretpInfo[$.UserName] = true
+        }
+      } else if (data.data && data.data.bizMsg) {
+        console.log(data.data.bizMsg);
+      } else {
+        console.log(res);
+      }
+      break;
     case 'olympicgames_receiveCash':
       if (data.code === 0 && data.data && data.data.result) {
         if (data.data.result.couponVO) {
@@ -221,13 +247,15 @@ async function dealReturn(type, res) {
       }
       break;
     case 'olypicgames_guradHome':
-      console.log(res)
       if (data.data && data.data.bizCode === 0) {
         console.log(`SH互助码：${data.data.result && data.data.result.inviteId || '助力已满，获取助力码失败\n'}`);
         if (data.data.result && data.data.result.inviteId) {
-          if (data.data.result.inviteId) $.ShInviteList.push(data.data.result.inviteId);
-          console.log(`守护金额：${Number(data.data.result.activityLeftAmount || 0)} 护盾剩余：${timeFn(Number(data.data.result.guardLeftSeconds || 0) * 1000)} 离结束剩：${timeFn(Number(data.data.result.activityLeftSeconds || 0) * 1000)}`)
-          if(data.data.result.activityLeftSeconds == 0) $.Shend = true
+          let look = data.data.result
+          look.assistanceVOList = (look.assistanceVOList && look.assistanceVOList.length) || 0
+          console.log(JSON.stringify(look))
+          if (look.inviteId) $.ShInviteList.push(look.inviteId);
+          console.log(`守护金额：${Number(look.activityLeftAmount || 0)} 助力次数：${look.assistanceVOList} 护盾剩余：${timeFn(Number(look.guardLeftSeconds || 0) * 1000)} 离结束剩：${timeFn(Number(look.activityLeftSeconds || 0) * 1000)}`)
+          if(look.activityLeftSeconds == 0) $.Shend = true
         }
         $.taskList = data.data.result && data.data.result.taskVos || [];
       } else if (data.data && data.data.bizMsg) {
@@ -260,7 +288,7 @@ async function getPostBody(type) {
   return new Promise(async resolve => {
     let taskBody = '';
     try {
-      var log = await getBody()
+      const log = await getBody()
       if (type === 'help' || type === 'shHelp') {
         taskBody = `functionId=olympicgames_assist&body=${JSON.stringify({"inviteId":$.inviteId,"type": "confirm","ss" :log})}&client=wh5&clientVersion=1.0.0&appid=${$.appid}`
       }
@@ -291,6 +319,45 @@ async function getPostRequest(type, body) {
 }
 
 
+
+function getAuthorShareCode(url) {
+  return new Promise(async resolve => {
+    const options = {
+      "url": `${url}?${new Date()}`,
+      "timeout": 10000,
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+      }
+    };
+    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+      const tunnel = require("tunnel");
+      const agent = {
+        https: tunnel.httpsOverHttp({
+          proxy: {
+            host: process.env.TG_PROXY_HOST,
+            port: process.env.TG_PROXY_PORT * 1
+          }
+        })
+      }
+      Object.assign(options, { agent })
+    }
+    let res = []
+    $.get(options, async (err, resp, data) => {
+      try {
+        if (err) {
+        } else {
+          if (data) res = JSON.parse(data)
+        }
+      } catch (e) {
+        // $.logErr(e, resp)
+      } finally {
+        resolve(res || []);
+      }
+    })
+    await $.wait(10000)
+    resolve(res);
+  })
+}
 
 /**
  * 随机从一数组里面取
