@@ -1,16 +1,30 @@
 /**
  * 京喜财富岛
  * 包含雇佣导游，建议每小时1次
+ *
+ * 此版本暂定默认帮助HelloWorld，帮助助力池
+ * export CFD_HELP_HW = true    // 帮助HelloWorld
+ * export CFD_HELP_POOL = true  // 帮助助力池
+ *
+ * 使用jd_env_copy.js同步js环境变量到ts
+ * 使用jd_ts_test.ts测试环境变量
  */
 
 import {format} from 'date-fns';
 import axios from 'axios';
 import USER_AGENT from './TS_USER_AGENTS';
+import * as dotenv from 'dotenv';
 
 const CryptoJS = require('crypto-js')
 
+dotenv.config()
 let appId: number = 10028, fingerprint: string | number, token: string, enCryptMethodJD: any;
 let cookie: string = '', cookiesArr: Array<string> = [], res: any = '', shareCodes: string[] = [];
+let CFD_HELP_HW: string = process.env.CFD_HELP_HW ? process.env.CFD_HELP_HW : "true";
+console.log('帮助HelloWorld:', CFD_HELP_HW)
+let CFD_HELP_POOL: string = process.env.CFD_HELP_POOL ? process.env.CFD_HELP_POOL : "true";
+console.log('帮助助力池:', CFD_HELP_POOL)
+
 
 let UserName: string, index: number, isLogin: boolean, nickName: string
 !(async () => {
@@ -23,7 +37,6 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
     index = i + 1;
     isLogin = true;
     nickName = '';
-    await TotalBean();
     console.log(`\n开始【京东账号${index}】${nickName || UserName}\n`);
 
     await makeShareCodes();
@@ -56,12 +69,17 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
 
     // 导游
     res = await api('user/EmployTourGuideInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')
-    for (let e of res.TourGuideList) {
-      if (e.strBuildIndex !== 'food' && e.ddwRemainTm === 0) {
-        let employ: any = await api('user/EmployTourGuide', '_cfd_t,bizCode,ddwConsumeCoin,dwEnv,dwIsFree,ptag,source,strBuildIndex,strZone',
-          {ddwConsumeCoin: e.ddwCostCoin, dwIsFree: 0, strBuildIndex: e.strBuildIndex})
-        console.log(employ)
-        await wait(3000)
+
+    if (!res.TourGuideList) {
+      console.log('手动雇佣4个试用导游')
+    } else {
+      for (let e of res.TourGuideList) {
+        if (e.strBuildIndex !== 'food' && e.ddwRemainTm === 0) {
+          let employ: any = await api('user/EmployTourGuide', '_cfd_t,bizCode,ddwConsumeCoin,dwEnv,dwIsFree,ptag,source,strBuildIndex,strZone',
+            {ddwConsumeCoin: e.ddwCostCoin, dwIsFree: 0, strBuildIndex: e.strBuildIndex})
+          console.log(employ)
+          await wait(3000)
+        }
       }
     }
 
@@ -102,14 +120,30 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
       await wait(1000)
     }
   }
-  if (cookiesArr.length === shareCodes.length) {
-    for (let i = 0; i < cookiesArr.length; i++) {
-      for (let j = 0; j < shareCodes.length; j++) {
-        cookie = cookiesArr[i]
-        res = await api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', {strShareId: shareCodes[j]})
-        console.log(res)
-        await wait(1000)
+
+  // 获取随机助力码
+  if (CFD_HELP_HW === 'true') {
+    shareCodes = [
+      ...shareCodes,
+    ]
+  }
+  if (CFD_HELP_POOL === 'true') {
+    let {data} = await axios.get('https://api.sharecode.ga/api/jxcfd/20')
+    console.log('获取到20个随机助力码:', data.data)
+    shareCodes = [...shareCodes, ...data.data]
+  } else {
+    console.log('你的设置是不帮助助力池！')
+  }
+  for (let i = 0; i < cookiesArr.length; i++) {
+    for (let j = 0; j < shareCodes.length; j++) {
+      cookie = cookiesArr[i]
+      console.log('去助力:', shareCodes[j])
+      res = await api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', {strShareId: shareCodes[j]})
+      console.log(res)
+      if (res.iRet === 2232 || res.sErrMsg === '今日助力次数达到上限，明天再来帮忙吧~') {
+        break
       }
+      await wait(3000)
     }
   }
 })()
@@ -183,10 +217,30 @@ function mainTask(fn: string, stk: string, params: Params = {}) {
 
 function makeShareCodes() {
   return new Promise<void>(async resolve => {
+    let {data} = await axios.post('https://api.m.jd.com/client.action?functionId=initForFarm', `body=${escape(JSON.stringify({"version": 4}))}&appid=wh5&clientVersion=9.1.0`, {
+      headers: {
+        "cookie": cookie,
+        "origin": "https://home.m.jd.com",
+        "referer": "https://home.m.jd.com/myJd/newhome.action",
+        "User-Agent": USER_AGENT,
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    })
+    let farm: string = data.farmUserPro.shareCode
     res = await api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,ptag,source,strShareId,strZone', {ddwTaskId: '', strShareId: '', strMarkList: 'undefined'})
     console.log('助力码:', res.strMyShareId)
     shareCodes.push(res.strMyShareId)
-    resolve()
+    axios.get(`https://api.sharecode.ga/api/jxcfd/insert?code=${res.strMyShareId}&farm=${farm}`)
+      .then(res => {
+        if (res.data.code === 200)
+          console.log('已自动提交助力码')
+        else
+          console.log('提交失败！已提交farm的cookie才可提交cfd')
+        resolve()
+      })
+      .catch(e => {
+        console.log(e)
+      })
   })
 }
 
@@ -260,38 +314,6 @@ function requireConfig() {
     })
     console.log(`共${cookiesArr.length}个京东账号\n`)
     resolve()
-  })
-}
-
-function TotalBean() {
-  return new Promise<void>(async resolve => {
-    axios.get('https://me-api.jd.com/user_new/info/GetJDUserInfoUnion', {
-      headers: {
-        Host: "me-api.jd.com",
-        Connection: "keep-alive",
-        Cookie: cookie,
-        "User-Agent": USER_AGENT,
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
-      }
-    }).then(res => {
-      if (res.data) {
-        let data = res.data
-        if (data['retcode'] === "1001") {
-          isLogin = false; //cookie过期
-          return;
-        }
-        if (data['retcode'] === "0" && data['data'] && data.data.hasOwnProperty("userInfo")) {
-          nickName = data.data.userInfo.baseInfo.nickname;
-        }
-      } else {
-        console.log('京东服务器返回空数据');
-      }
-    }).catch(e => {
-      console.log('Error:', e)
-    })
-    resolve();
   })
 }
 

@@ -24,11 +24,13 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
         index = i + 1;
         isLogin = true;
         nickName = '';
-        await TotalBean();
         console.log(`\n开始【京东账号${index}】${nickName || UserName}\n`);
 
         res = await speedUp('_cfd_t,bizCode,dwEnv,ptag,source,strBuildIndex,strZone')
-        console.log(res)
+        if (res.iRet !== 0) {
+          console.log('去手动新手教程')
+          continue
+        }
         console.log('今日热气球:', res.dwTodaySpeedPeople, '/', 20)
         let shell: any = await speedUp('_cfd_t,bizCode,dwEnv,ptag,source,strZone')
         for (let s of shell.Data.NormShell) {
@@ -42,27 +44,32 @@ let UserName: string, index: number, isLogin: boolean, nickName: string
       console.log(e)
       break
     }
-    await wait(10000)
+    await wait(getRandomNumberByRange(10, 25))
   }
 })()
 
 function speedUp(stk: string, dwType?: number) {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     let url: string = `https://m.jingxi.com/jxbfd/user/SpeedUp?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&strBuildIndex=food&_ste=1&_=${Date.now()}&sceneval=2&_stk=${encodeURIComponent(stk)}`
     if (stk === '_cfd_t,bizCode,dwEnv,ptag,source,strZone')
       url = `https://m.jingxi.com/jxbfd/story/queryshell?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&_stk=_cfd_t%2CbizCode%2CdwEnv%2Cptag%2Csource%2CstrZone&_ste=1&_=${Date.now()}&sceneval=2`
     if (stk === '_cfd_t,bizCode,dwEnv,dwType,ptag,source,strZone')
       url = `https://m.jingxi.com/jxbfd/story/pickshell?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&dwType=${dwType}&_stk=_cfd_t%2CbizCode%2CdwEnv%2CdwType%2Cptag%2Csource%2CstrZone&_ste=1&_=${Date.now()}&sceneval=2`
     url += '&h5st=' + decrypt(stk, url)
-    let {data} = await axios.get(url, {
-      headers: {
-        'Host': 'm.jingxi.com',
-        'Referer': 'https://st.jingxi.com/',
-        'User-Agent': USER_AGENT,
-        'Cookie': cookie
-      }
-    })
-    resolve(data)
+    try {
+      let {data} = await axios.get(url, {
+        headers: {
+          'Host': 'm.jingxi.com',
+          'Referer': 'https://st.jingxi.com/',
+          'User-Agent': USER_AGENT,
+          'Cookie': cookie
+        }
+      })
+      resolve(data)
+    } catch (e) {
+      reject(e)
+    }
+
   })
 }
 
@@ -139,38 +146,6 @@ function requireConfig() {
   })
 }
 
-function TotalBean() {
-  return new Promise<void>(async resolve => {
-    axios.get('https://me-api.jd.com/user_new/info/GetJDUserInfoUnion', {
-      headers: {
-        Host: "me-api.jd.com",
-        Connection: "keep-alive",
-        Cookie: cookie,
-        "User-Agent": USER_AGENT,
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
-      }
-    }).then(res => {
-      if (res.data) {
-        let data = res.data
-        if (data['retcode'] === "1001") {
-          isLogin = false; //cookie过期
-          return;
-        }
-        if (data['retcode'] === "0" && data['data'] && data.data.hasOwnProperty("userInfo")) {
-          nickName = data.data.userInfo.baseInfo.nickname;
-        }
-      } else {
-        console.log('京东服务器返回空数据');
-      }
-    }).catch(e => {
-      console.log('Error:', e)
-    })
-    resolve();
-  })
-}
-
 function generateFp() {
   let e = "0123456789";
   let a = 13;
@@ -193,4 +168,8 @@ function wait(t: number) {
       resolve()
     }, t)
   })
+}
+
+function getRandomNumberByRange(start: number, end: number): number {
+  return Math.floor(Math.random() * (end - start) + start)
 }
