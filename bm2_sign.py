@@ -40,7 +40,7 @@ def start():
         do_sign(tk)
         do_scan_score(tk)
         do_answer(tk)
-        do_comment(tk)
+        # do_comment(tk)
 
 
 def do_sign(tk):
@@ -186,7 +186,7 @@ def do_answer(tk):
         resp = ss.get(url=url, headers=header).json()
         print(resp)
         if resp['code'] == 0:
-            if resp['data']['state'] == 1:
+            if resp['data']['state'] == 3:
                 message("未答题，开始答题")
                 url = 'https://bm2-api.bluemembers.com.cn/v1/app/special/daily/ask_answer'
                 question_info = resp['data']['question_info']
@@ -243,7 +243,7 @@ def do_answer(tk):
 def get_comment_list(tk):
     try:
         message("获取评论列表，用于识别出今日答案")
-        url = 'https://bm2-api.bluemembers.com.cn/v1/app/white/comment/new_list?category=4&info_hid=1f12a40e0cc6461db3aec81c8479df6e&page_no=1&page_size=80'
+        url = 'https://bm2-api.bluemembers.com.cn/v1/app/white/recom/list2'
         header = {
             'Accept': 'application/json, text/plain, */*',
             'App-Version': '7.8.3',
@@ -257,19 +257,41 @@ def get_comment_list(tk):
             'Origin-Id': 'D25BD59F-75AC-4D70-AE10-3DB6C4173858',
             'Content-Type': 'application/json;charset=utf-8'
         }
-        resp = ss.get(url=url, headers=header).json()
-        print(resp)
+        body = {
+            'page_no': 1,
+            'page_size': 4
+        }
+        resp = ss.post(url=url, headers=header, json=body).json()
         if resp['code'] == 0:
-            c_list = resp['data']['list']
-            now = time.strftime("%Y-%m-%d", time.localtime())
+            data_list = resp['data']['list']
             contents = []
-            for comment in c_list:
-                if comment['created_at'].startswith(now):
-                    contents.append(comment['content'])
-
+            for data in data_list:
+                time.sleep(1)
+                data_id = data['data_id']
+                category = data['category']
+                url = f'https://bm2-api.bluemembers.com.cn/v1/app/white/comment/new_list?category={category}&info_hid={data_id}&page_no=1&page_size=80'
+                header = {
+                    'Accept': 'application/json, text/plain, */*',
+                    'App-Version': '7.8.3',
+                    'Accept-Language': 'zh-cn',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Token': tk,
+                    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148bjxd',
+                    'Connection': 'keep-alive',
+                    'Referer': 'https://bm2-wx.bluemembers.com.cn/app/lottery',
+                    'Device': 'iOS',
+                    'Origin-Id': 'D25BD59F-75AC-4D70-AE10-3DB6C4173858',
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+                resp = ss.get(url=url, headers=header).json()
+                print(resp)
+                if resp['code'] == 0:
+                    c_list = resp['data']['list']
+                    now = time.strftime("%Y-%m-%d", time.localtime())
+                    for comment in c_list:
+                        if comment['created_at'].startswith(now):
+                            contents.append(comment['content'])
             return contents
-        else:
-            return []
     except Exception as e:
         print(e)
         return []
