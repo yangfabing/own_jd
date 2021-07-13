@@ -17,7 +17,9 @@ else
   echo "git pull拉取最新代码..."
   git -C /scripts pull --rebase
   echo "npm install 安装最新依赖"
-  npm install ts-node -g
+  npm install -D tslib @types/node
+  npm install -g typescript
+  npm install ts-node -g --save  --unsafe-perm=true --allow-root
   npm install --prefix /scripts
   npm install node-fetch
 fi
