@@ -1,8 +1,9 @@
-/*
+﻿/*
 此文件为Node.js专用。其他用户请忽略
  */
 //此处填写京东账号cookie。
 let CookieJDs = [
+  '',//账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
 ]
 // 判断环境变量里面是否有京东ck
 if (process.env.JD_COOKIE) {
