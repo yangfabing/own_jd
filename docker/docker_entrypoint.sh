@@ -19,7 +19,8 @@ else
   echo "npm install 安装最新依赖"
   npm install --prefix /scripts
   npm install node-fetch
-  npm install typescript ts-node
+  npm install -g typescript ts-node
+  npm install --save -g @types/node
 fi
 ) || exit 0
 
@@ -57,10 +58,3 @@ if [ -n "$run_cmd" ]; then
 else
   echo "默认定时任务执行结束。"
 fi
-
-echo "处理财富岛jd_cfd_loop任务。。。"
-echo "默认启用jd_cfd_loop杀掉jd_cfd_loop任务，并重启"
-eval $(ps -ef | grep "jd_cfd_loop" | grep -v "grep" | awk '{print "kill "$1}')
-echo '' >/scripts/logs/jd_cfd_loop.log
-ts-node /scripts/jd_cfd_loop.ts | ts >>/scripts/logs/jd_cfd_loop.log 2>&1 &
-echo "默认jd_cfd_loop重启完成"
