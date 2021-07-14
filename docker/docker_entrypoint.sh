@@ -19,7 +19,7 @@ else
   echo "npm install 安装最新依赖"
   npm install --prefix /scripts
   npm install node-fetch
-  npm install -g typescript ts-node
+  npm install typescript ts-node
 fi
 ) || exit 0
 
