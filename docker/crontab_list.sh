@@ -95,7 +95,7 @@
 #京东极速版签到+赚现金任务
 21 1,6 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
 #京喜财富岛
-5 0-23/1 * * * ts-node /scripts/jd_cfd.ts >> /scripts/logs/jd_cfd.log 2>&1
+5 0-23/1 * * * ts-node /scripts/jd_cfd.ts | ts >> /scripts/logs/jd_cfd.log 2>&1
 #京喜财富岛提现
 # 0 0 * * * node /scripts/jx_cfdtx.js >> /scripts/logs/jx_cfdtx.log 2>&1
 # 删除优惠券(默认注释，如需要自己开启，如有误删，已删除的券可以在回收站中还原，慎用)
@@ -159,7 +159,7 @@
 #全民抢京豆
 # 3 0 * * * python3 /scripts/jd_qjd.py >> /scripts/logs/jd_qjd.log 2>&1
 #众筹许愿池
-4 0 * * * ts-node /scripts/jd_wishingPool.ts >> /scripts/logs/jd_wishingPool.log 2>&1
+4 0 * * * ts-node /scripts/jd_wishingPool.ts | ts >> /scripts/logs/jd_wishingPool.log 2>&1
 #早起领福利
 4 0 * * * python3 /scripts/jd_zqfl.py >> /scripts/logs/jd_zqfl.log 2>&1
 # 签到领现金-助力
