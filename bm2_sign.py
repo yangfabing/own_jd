@@ -186,7 +186,7 @@ def do_answer(tk):
         resp = ss.get(url=url, headers=header).json()
         print(resp)
         if resp['code'] == 0:
-            if resp['data']['state'] == 3:
+            if resp['data']['state'] == 1:
                 message("未答题，开始答题")
                 url = 'https://bm2-api.bluemembers.com.cn/v1/app/special/daily/ask_answer'
                 question_info = resp['data']['question_info']
