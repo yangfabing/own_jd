@@ -184,4 +184,6 @@
 15 6 * * * node /scripts/jd_DrawEntrance.js >> /scripts/logs/jd_DrawEntrance.log 2>&1
 #店铺签到
 20 8 * * * node /scripts/jd_dpqd.js >> /scripts/logs/jd_dpqd.log 2>&1
+#柠檬特务Z行动-星小店
+20 0 * * * node /scripts/jd_twz-star.js >> /scripts/logs/jd_twz-star.log 2>&1
 
