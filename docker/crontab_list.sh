@@ -2,9 +2,6 @@
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf
 #收集助力码
 30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /scripts/logs/auto_help_collect.log 2>&1
-#循环任务检测
-20 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
-
 ##############短期活动##############
 #女装盲盒 活动时间：2021-06-21-06-30
 35 1,22 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
@@ -188,4 +185,9 @@
 20 8 * * * node /scripts/jd_dpqd.js >> /scripts/logs/jd_dpqd.log 2>&1
 #柠檬特务Z行动-星小店
 20 0 * * * node /scripts/jd_twz-star.js >> /scripts/logs/jd_twz-star.log 2>&1
-
+#循环任务检测
+20 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
+#财富岛定时循环任务
+21 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
+#翻翻乐
+1 6-21/1 * * * node /scripts/jd_618redpacket.js >> /scripts/logs/jd_618redpacket.log 2>&1
