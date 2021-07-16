@@ -110,7 +110,7 @@
 # 领金贴
 5 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
 #京喜牧场
-15 0-23/3 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
+15 0-23/3 * * * ts-node /scripts/jd_jxmc.ts |ts >> /scripts/logs/jd_jxmc.log 2>&1
 #电竞经理
 12 0-23/3 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
 #半点红包雨
@@ -120,7 +120,7 @@
 #点点券二代目
 10 0,20 * * * node /scripts/jd_necklace_new.js >> /scripts/logs/jd_necklace_new.log 2>&1
 #互助池test
-0 12 * * * node /scripts/jd_api_test.js >> /scripts/logs/jd_api_test.log 2>&1
+0 12 * * * ts-node /scripts/jd_api_test.ts |ts >> /scripts/logs/jd_api_test.log 2>&1
 #京东到家鲜豆任务
 9 0 * * * node /scripts/jddj_bean.js >> /scripts/logs/jddj_bean.log 2>&1
 #京东到家果园
@@ -190,4 +190,4 @@
 #财富岛定时循环任务
 21 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
 #翻翻乐
-1 6-21/1 * * * node /scripts/jd_618redpacket.js >> /scripts/logs/jd_618redpacket.log 2>&1
+20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
