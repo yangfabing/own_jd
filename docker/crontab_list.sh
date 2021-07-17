@@ -31,8 +31,8 @@
 # 宠汪汪二代目
 45 */2,23 * * * node /scripts/jd_joy_new.js >> /scripts/logs/jd_joy_new.log 2>&1
 # 宠汪汪积分兑换京豆-新版
-0 0,8,16 * * * node /scripts/jd_joy_reward_new.js >> /scripts/logs/jd_joy_reward_new.log 2>&1
-58 7,15,23 * * * node /scripts/jd_validate.js >> /scripts/logs/jd_validate.log 2>&1
+0 0,8,16 * * * ts-node /scripts/jd_reward.ts |ts >> /scripts/logs/jd_reward.log 2>&1
+58 7,15,23 * * * node /scripts/jd_validate_Worker.js >> /scripts/logs/jd_validate_Worker.log 2>&1
 # 摇钱树
 23 */2 * * * node /scripts/jd_moneyTree.js >> /scripts/logs/jd_moneyTree.log 2>&1
 # 东东萌宠
