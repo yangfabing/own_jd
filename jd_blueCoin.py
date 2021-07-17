@@ -15,10 +15,10 @@ TG频道 https://t.me/TopStyle2021
 #ENV设置：export JD_COOKIE='cookie1&cookie2'
 cookies = ''
 #【填写您要兑换的商品】ENV设置： export coinToBeans='京豆包'
-coinToBeans = '超值京豆包(0点限量)'
+coinToBeans = ''
 
-#多账号并发，默认开启 ENV设置开启： export blueCoin_Cc=True
-blueCoin_Cc = True
+#多账号并发，默认关闭 ENV设置开启： export blueCoin_Cc=True
+blueCoin_Cc = False
 #单击次数
 dd_thread = 3
 ###############################################
@@ -440,8 +440,7 @@ def smtg_obtainPrize(prizeId, areaId, periodId, headers, username):
         printT(result)
         success = result['data']['success']
         bizMsg = result['data']['bizMsg']
-        if success == True:
-            printT(result)
+        if success:
             printT(f"【{username}】{bizMsg}...恭喜兑换成功！")
             return 0
         else:
@@ -449,6 +448,7 @@ def smtg_obtainPrize(prizeId, areaId, periodId, headers, username):
             return 999
     except Exception as e:
         printT(e)
+        return 999
 
 
 def issmtg_obtainPrize(ck, user_num, prizeId, areaId, periodId, title):
@@ -542,6 +542,8 @@ def start():
                     for thread in ttt:
                         thread.join()
                         result = thread.get_result()
+                        if result == 2:
+                            break
                     if result == 2:
                         break
                 else:
@@ -549,6 +551,8 @@ def start():
                     for ck in cookies:
                         response = issmtg_obtainPrize(ck, user_num, prizeId, areaId, periodId, title)
                         user_num += 1
+                        if response == 2:
+                            break
                     if response == 2:
                         break
             elif nowtime > qgendtime:
