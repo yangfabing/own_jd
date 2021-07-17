@@ -166,7 +166,7 @@
 #北京现代签到、任务
 30 9 * * * python3 /scripts/bm2_sign.py >> /scripts/logs/bm2_sign.log 2>&1
 #签到图形验证码
-25 2,16 * * * node /scripts/jd_sign.js >> /scripts/logs/jd_sign.log 2>&1
+14 10 * * * node /scripts/jd_sign_graphics.js >> /scripts/logs/jd_sign_graphics.log 2>&1
 #汪汪乐园任务
 20 3 * * * node /scripts/jd_joy_park_task.js >> /scripts/logs/jd_joy_park_task.log 2>&1
 #汪汪乐园合成
