@@ -39,6 +39,8 @@ if os.path.exists(cur_path + "/sendNotify.py"):
 else:
     def send(title, content):
         pass
+
+
 ###################
 
 
@@ -47,7 +49,7 @@ def start():
     # 先熊掌门相互助力
     message("====熊掌门邀请好友相互助力===")
     for ck in cookies:
-        message(f"账号【{cookies.index(ck)+1}】给其他账号助力")
+        message(f"账号【{cookies.index(ck) + 1}】给其他账号助力")
         sso_cookie = sso_cookies[cookies.index(ck)]
         for share_phone in sso_cookies:
             time.sleep(1)
@@ -55,7 +57,7 @@ def start():
 
     time.sleep(1)
     for ck in cookies:
-        message(f"===账号【{cookies.index(ck)+1}】开始做任务===")
+        message(f"===账号【{cookies.index(ck) + 1}】开始做任务===")
         sso_cookie = sso_cookies[cookies.index(ck)]
         # 签到
         do_sign(ck, sso_cookie)
@@ -69,8 +71,10 @@ def start():
         do_draw_gif(sso_cookie)
         time.sleep(1)
         # 足球欧洲杯抽奖
-        epncup_draw(sso_cookie)
-        time.sleep(1)
+        # epncup_draw(sso_cookie)
+        # time.sleep(1)
+        # 会员日抽奖
+        do_members_day(sso_cookie)
         # 激活卡券
         do_active_kaquan(sso_cookie)
 
@@ -326,6 +330,38 @@ def do_active_kaquan(sso_cookie):
             }
             resp = ss.post(url=url, data=body).json()
             print(resp)
+    except Exception as e:
+        print(e)
+
+
+def do_members_day(sso_cookie):
+    try:
+        message('查询会员日抽奖信息')
+        key = ''.join(str(random.choice(range(1, 10))) for _ in range(16))
+        url = f'https://wap.sc.10086.cn/scmccCampaign/membersDay/init.do?key=0.{key}'
+        body = {
+            'SSOCookie': sso_cookie
+        }
+        resp = ss.post(url=url, data=body).json()
+        print(resp)
+        if resp['result']['code'] == 0:
+            obj = resp['result']['obj']
+            # 报名
+            is_appointment_day = obj['isAppointmentDay']
+            is_appointment = obj['isAppointment']
+            if is_appointment_day is True and is_appointment is False:
+                url = 'https://wap.sc.10086.cn/scmccCampaign/membersDay/appointment.do'
+                body = {
+                    'SSOCookie': sso_cookie,
+                    'channel': 'ztapp'
+                }
+                resp = ss.post(url=url, data=body).json()
+                print(resp)
+                message(resp['result']['info'])
+
+            # TODO:抽奖
+            is_draw_prize_day = obj['isDrawPrizeDay']
+            is_prize = obj['isPrize']
     except Exception as e:
         print(e)
 
