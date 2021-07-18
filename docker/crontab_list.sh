@@ -189,5 +189,5 @@
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
 #京喜签到
 5 0 * * * node /scripts/jd_jxqd.js >> /scripts/logs/jd_jxqd.log 2>&1
-
-
+#人人视频
+10 9 * * * python3 /scripts/rrtv.py >> /scripts/logs/rrtv.log 2>&1
