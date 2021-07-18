@@ -10,9 +10,9 @@ let Jxtoken = [
     strPhoneID: "1f16c12de39bc3f9b97715f2790d621eb92c950c"
   },
   {
-    strPgUUNum: "",
-    strPgtimestamp: "",
-    strPhoneID: ""
+    strPgUUNum: "957164b2407d6095cebc9e663181624d",
+    strPgtimestamp: "1626599842416",
+    strPhoneID: "5ccd5899d768add815a2c086d719fc00817ef852"
   },
   {
     strPgUUNum: "",
