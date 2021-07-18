@@ -188,4 +188,6 @@
 #人人视频
 10 9 * * * python3 /scripts/rrtv.py >> /scripts/logs/rrtv.log 2>&1
 #财富岛提现
-0 0 * * * ts-node scripts/jd_cfd_cashOut.ts |ts >> /scripts/logs/jd_cfd_cashOut.log 2>&1
+0 0 * * * ts-node /scripts/jd_cfd_cashOut.ts |ts >> /scripts/logs/jd_cfd_cashOut.log 2>&1
+#伊利养牛
+0 12 * * * node /scripts/jd_ylyn.js >> /scripts/logs/jd_ylyn.log 2>&1
