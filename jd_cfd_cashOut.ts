@@ -18,7 +18,7 @@ dotenv.config()
 let appId: number = 10028, fingerprint: string | number, token: string = '', enCryptMethodJD: any;
 let cookie: string = '', res: any = '', UserName: string, index: number;
 
-let money: number = process.env.CFD_CASHOUT_MONEY ? parseFloat(process.env.CFD_CASHOUT_MONEY) * 100 : 10 * 100
+let money: number = process.env.CFD_CASHOUT_MONEY ? parseFloat(process.env.CFD_CASHOUT_MONEY) * 100 : 1 * 100
 let CFD_CASH_TOKEN: any = process.env.CFD_CASH_TOKEN ?? []
 
 if (CFD_CASH_TOKEN.length === 0) {
