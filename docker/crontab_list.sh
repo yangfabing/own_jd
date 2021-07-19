@@ -110,7 +110,7 @@
 #京喜牧场
 15 0-23/3 * * * ts-node /scripts/jd_jxmc.ts |ts >> /scripts/logs/jd_jxmc.log 2>&1
 #电竞经理
-12 0-23/3 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
+# 12 0-23/3 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
 #半点红包雨
 30 16-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
 #整点红包雨
