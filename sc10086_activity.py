@@ -359,9 +359,17 @@ def do_members_day(sso_cookie):
                 print(resp)
                 message(resp['result']['info'])
 
-            # TODO:抽奖
             is_draw_prize_day = obj['isDrawPrizeDay']
             is_prize = obj['isPrize']
+            if is_draw_prize_day is True and is_prize is False:
+                url = 'https://wap.sc.10086.cn/scmccCampaign/membersDay/doPrize.do'
+                body = {
+                    'SSOCookie': sso_cookie,
+                    'channel': 'ztapp'
+                }
+                resp = ss.post(url=url, data=body).json()
+                print(resp)
+                message(resp['result']['info'])
     except Exception as e:
         print(e)
 
