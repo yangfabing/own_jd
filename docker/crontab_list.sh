@@ -94,7 +94,7 @@
 #京东极速版签到+赚现金任务
 21 1,6 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
 #京喜财富岛
-5 0-23/1 * * * ts-node /scripts/jd_cfd.ts | ts >> /scripts/logs/jd_cfd.log 2>&1
+18 0-23/2 * * * node /scripts/gua_wealth_island.js >> /scripts/logs/gua_wealth_island.log 2>&1
 # 删除优惠券(默认注释，如需要自己开启，如有误删，已删除的券可以在回收站中还原，慎用)
 #20 9 * * 6 node /scripts/jd_delCoupon.js >> /scripts/logs/jd_delCoupon.log 2>&1
 #京东直播（又回来了）
@@ -178,9 +178,9 @@
 #柠檬特务Z行动-星小店
 20 0 * * * node /scripts/jd_twz-star.js >> /scripts/logs/jd_twz-star.log 2>&1
 #循环任务检测
-0 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
+# 0 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
 #财富岛定时循环任务
-1 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
+# 1 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
 #翻翻乐
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
 #京喜签到
@@ -193,3 +193,5 @@
 0 12 * * * node /scripts/jd_ylyn.js >> /scripts/logs/jd_ylyn.log 2>&1
 #摇钱树助力
 0-59/30 * * * * node /scripts/jd_moneyTree_help.js >> /scripts/logs/jd_moneyTree_help.log 2>&1
+#摸冰
+6 9,12 * * * node /scripts/jd_mb.js >> /scripts/logs/jd_mb.log 2>&1
