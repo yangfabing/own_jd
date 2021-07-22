@@ -3,16 +3,19 @@
 '''
 项目名称: JD-Script / jd_qjd
 Author: Curtin
-功能：全民抢京豆（7.2-7.15）：https://h5.m.jd.com/rn/3MQXMdRUTeat9xqBSZDSCCAE9Eqz/index.html?has_native=0
+功能：全民抢京豆（7.22-7.31）：https://h5.m.jd.com/rn/3MQXMdRUTeat9xqBSZDSCCAE9Eqz/index.html?has_native=0
     满160豆需要20人助力，每个用户目前只能助力2次不同的用户。
 Date: 2021/7/3 上午10:02
 TG交流 https://t.me/topstyle996
 TG频道 https://t.me/TopStyle2021
-update: 2021.7.4 18:26
+update: 2021.7.22 16:55
 * 修复了助力活动不存在、增加了随机UA（如果未定义ua则启用随机UA）
 * 新增推送
+* 修复0点不能开团
+* 兼容pin为中文转码编码
 '''
-
+#print("全民抢京豆(7.2-7.15）--活动已结束\nTG交流 https://t.me/topstyle996\nTG频道 https://t.me/TopStyle2021")
+#exit(0)
 #ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
 cookies = ''
 qjd_zlzh = ['137946283_m', 'jd_689e504053da3', '474208788HUA']
@@ -57,45 +60,64 @@ t = time.time()
 aNum = 0
 beanCount = 0
 userCount = {}
-
-######## 获取通知模块
-message_info = ''''''
-def message(str_msg):
-    global message_info
-    print(str_msg)
-    message_info = "{}\n{}".format(message_info, str_msg)
-    sys.stdout.flush()
-def getsendNotify(a=0):
-    if a == 0:
-        a += 1
-    try:
-        url = 'https://gitee.com/curtinlv/Public/raw/master/sendNotify.py'
-        response = requests.get(url)
-        if 'main' in response.text:
-            with open('sendNotify.py', "w+", encoding="utf-8") as f:
-                f.write(response.text)
-        else:
+## 获取通知服务
+class msg(object):
+    def __init__(self, m):
+        self.str_msg = m
+        self.message()
+    def message(self):
+        global msg_info
+        print(self.str_msg)
+        try:
+            msg_info = "{}\n{}".format(msg_info, self.str_msg)
+        except:
+            msg_info = "{}".format(self.str_msg)
+        sys.stdout.flush()
+    def getsendNotify(self, a=0):
+        if a == 0:
+            a += 1
+        try:
+            url = 'https://gitee.com/curtinlv/Public/raw/master/sendNotify.py'
+            response = requests.get(url)
+            if 'curtinlv' in response.text:
+                with open('sendNotify.py', "w+", encoding="utf-8") as f:
+                    f.write(response.text)
+            else:
+                if a < 5:
+                    a += 1
+                    return self.getsendNotify(a)
+                else:
+                    pass
+        except:
             if a < 5:
                 a += 1
-                return getsendNotify(a)
+                return self.getsendNotify(a)
             else:
                 pass
-    except:
-        if a < 5:
-            a += 1
-            return getsendNotify(a)
+    def main(self):
+        global send
+        cur_path = os.path.abspath(os.path.dirname(__file__))
+        sys.path.append(cur_path)
+        if os.path.exists(cur_path + "/sendNotify.py"):
+            try:
+                from sendNotify import send
+            except:
+                self.getsendNotify()
+                try:
+                    from sendNotify import send
+                except:
+                    print("加载通知服务失败~")
         else:
-            pass
-cur_path = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(cur_path)
-if os.path.exists(cur_path + "/sendNotify.py"):
-    from sendNotify import send
-else:
-    getsendNotify()
-    from sendNotify import send
-###################
+            self.getsendNotify()
+            try:
+                from sendNotify import send
+            except:
+                print("加载通知服务失败~")
+        ###################
+msg("").main()
+##############
 
-###### 获取cookie
+## 获取cookie
 class getJDCookie(object):
     # 适配各种平台环境ck
     def getckfile(self):
@@ -210,6 +232,7 @@ class getJDCookie(object):
             exit(4)
 getCk = getJDCookie()
 getCk.getCookie()
+##############
 
 if "qjd_zlzh" in os.environ:
     if len(os.environ["qjd_zlzh"]) > 1:
@@ -233,7 +256,9 @@ def userAgent():
 def getShareCode(ck):
     global aNum
     try:
+        # uuid = ''.join(random.sample('123456789abcdef123456789abcdef123456789abcdef123456789abcdef', 40))
         v_num1 = ''.join(random.sample(["1", "2", "3", "4", "5", "6", "7", "8", "9"], 1)) + ''.join(random.sample(string.digits, 4))
+        url1 = f'https://api.m.jd.com/client.action?functionId=signGroupHit&body=%7B%22activeType%22%3A2%7D&appid=ld&client=apple&clientVersion=10.0.6&networkType=wifi&osVersion=14.3&uuid=&jsonp=jsonp_' + str(int(round(t * 1000))) + '_' + v_num1
         url = 'https://api.m.jd.com/client.action?functionId=signBeanGroupStageIndex&body=%7B%22monitor_refer%22%3A%22%22%2C%22rnVersion%22%3A%223.9%22%2C%22fp%22%3A%22-1%22%2C%22shshshfp%22%3A%22-1%22%2C%22shshshfpa%22%3A%22-1%22%2C%22referUrl%22%3A%22-1%22%2C%22userAgent%22%3A%22-1%22%2C%22jda%22%3A%22-1%22%2C%22monitor_source%22%3A%22bean_m_bean_index%22%7D&appid=ld&client=apple&clientVersion=&networkType=&osVersion=&uuid=&jsonp=jsonp_' + str(int(round(t * 1000))) + '_' + v_num1
         head = {
             'Cookie': ck,
@@ -246,7 +271,7 @@ def getShareCode(ck):
             'User-Agent': userAgent(),
             'Accept-Language': 'zh-cn'
         }
-        requests.get(url='https://h5.m.jd.com/rn/3MQXMdRUTeat9xqBSZDSCCAE9Eqz/index.html?has_native=0&tttparams=&lng=&lat=&sid=&un_area=',  headers=head, verify=False, timeout=30)
+        requests.get(url1,  headers=head, verify=False, timeout=30)
         resp = requests.get(url=url, headers=head, verify=False, timeout=30).text
         r = re.compile(r'jsonp_.*?\((.*?)\)\;', re.M | re.S | re.I)
         result = r.findall(resp)
@@ -316,7 +341,7 @@ def start():
             ckNum = userNameList.index(ckname)
         except Exception as e:
             try:
-                ckNum = pinNameList.index(ckname)
+                ckNum = pinNameList.index(unquote(ckname))
             except:
                 print(f"请检查被助力账号【{ckname}】名称是否正确？提示：助力名字可填pt_pin的值、也可以填账号名。")
                 continue
@@ -324,7 +349,7 @@ def start():
         print(f"### 开始助力账号【{userNameList[int(ckNum)]}】###")
         groupCode, shareCode, sumBeanNumStr, activityId = getShareCode(cookiesList[ckNum])
         if groupCode == 0:
-            print(f"## {userNameList[int(ckNum)]}  获取互助码失败。请手动分享后再试！")
+            msg(f"## {userNameList[int(ckNum)]}  获取互助码失败。请手动分享后再试~ 或建议早上再跑。")
             continue
         u = 0
         for i in cookiesList:
@@ -341,10 +366,10 @@ def start():
         beanCount += sumBeanNumStr
     print("\n-------------------------")
     for i in userCount.keys():
-        message(f"账号【{i}】已抢京豆: {userCount[i]}")
-    message(f"## 今日累计获得 {beanCount} 京豆")
+        msg(f"账号【{i}】已抢京豆: {userCount[i]}")
+    msg(f"## 今日累计获得 {beanCount} 京豆")
     try:
-        send(scriptName, message_info)
+        send(scriptName, msg_info)
     except:
         pass
 
