@@ -200,5 +200,6 @@
 #领京豆-升级赚京豆
 21 9 * * * node /scripts/gua_MMdou.js >> /scripts/logs/gua_MMdou.log 2>&1
 #点点劵
-20 0,20 * * * ts-node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
-
+20 0,20 * * * node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
+#极速版-百元生活费-赚金币-种水果
+5 0-23/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
