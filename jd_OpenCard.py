@@ -717,6 +717,8 @@ def isUpdate():
         exit(666)
 
 def getUserInfo(ck, pinName, userNum):
+    return ck, pinName
+
     url = 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion?orgFlag=JD_PinGou_New&callSource=mainorder&channel=4&isHomewhite=0&sceneval=2&sceneval=2&callback=GetJDUserInfoUnion'
     headers = {
         'Cookie': ck,
