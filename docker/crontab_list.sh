@@ -187,6 +187,8 @@
 # 10 9 * * * python3 /scripts/rrtv.py >> /scripts/logs/rrtv.log 2>&1
 #京喜财富岛
 18 0-23/2 * * * node /scripts/gua_wealth_island.js >> /scripts/logs/gua_wealth_island.log 2>&1
+#财富岛互助
+18 0,1,9,14,18 * * * node /scripts/gua_wealth_island_help.js >> /scripts/logs/gua_wealth_island_help.log 2>&1
 #财富岛提现
 59 11,12,23 * * * node /scripts/jd_cfdtx.js >> /scripts/logs/jd_cfdtx.log 2>&1
 #伊利养牛
