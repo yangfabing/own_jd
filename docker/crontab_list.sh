@@ -21,7 +21,7 @@
 # 0 0-23/4 * * * node /scripts/jd_mohe.js >> /scripts/logs/jd_mohe.log 2>&1
 ##############长期活动##############
 # 签到
-7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
+7 0,17 * * * cd /scripts && ts-node jd_bean_sign.ts |ts >> /scripts/logs/jd_bean_sign.log 2>&1
 # 东东超市兑换奖品
 59 23 * * * python3 /scripts/jd_blueCoin.py >> /scripts/logs/jd_blueCoin.log 2>&1
 # 摇京豆
@@ -205,3 +205,17 @@
 20 0,20 * * * node /scripts/jd_necklace.js >> /scripts/logs/jd_necklace.log 2>&1
 #极速版-百元生活费-赚金币-种水果
 5 0-23/6 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
+
+0 9,12 * * * ts-node /scripts/jd_bean_box.ts |ts >> /scripts/logs/jd_bean_box.log 2>&1
+#京喜农场助力
+50 * * * * node /scripts/jd_dreamFactory_help.js >> /scripts/logs/jd_dreamFactory_help.log 2>&1
+#家庭号
+1 12,23 * * * node /scripts/jd_family.js >> /scripts/logs/jd_family.log 2>&1
+#农场补充任务
+0 11,12 * * * ts-node /scripts/jd_fruit_moreTask.ts |ts >> /scripts/logs/jd_fruit_moreTask.log 2>&1
+0 20 * * 6 ts-node /scripts/jd_getShareCodes.ts |ts >> /scripts/logs/jd_getShareCodes.log 2>&1
+30 * * * * ts-node /scripts/jd_jxgc.ts |ts >> /scripts/logs/jd_jxgc.log 2>&1
+#京喜牧场上新通知
+0 * * * * ts-node /scripts/jd_jxmc_stock.ts |ts >> /scripts/logs/jd_jxmc_stock.log 2>&1
+
+

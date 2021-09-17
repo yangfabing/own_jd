@@ -14,6 +14,10 @@ const timeout = 15000;//超时时间(单位毫秒)
 //此处填你申请的SCKEY.
 //(环境变量名 PUSH_KEY)
 let SCKEY = '';
+// 自建serverchan 环境变量名 PUSH_KEY_WECOM
+let SCKEY_WECOM = '';
+// 自建serverchan 环境变量名 PUSH_KEY_WECOM_URL
+let SCKEY_WECOM_URL = '';
 
 // =======================================Bark App通知设置区域===========================================
 //此处填你BarkAPP的信息(IP/设备码，例如：https://api.day.app/XXXXXXXX)
@@ -84,6 +88,14 @@ process.env.go_cqhttp_method ? go_cqhttp_method = process.env.go_cqhttp_method :
 //==========================云端环境变量的判断与接收=========================
 if (process.env.PUSH_KEY) {
   SCKEY = process.env.PUSH_KEY;
+}
+
+if (process.env.PUSH_KEY_WECOM) {
+  SCKEY_WECOM = process.env.PUSH_KEY_WECOM;
+}
+
+if (process.env.PUSH_KEY_WECOM_URL) {
+  SCKEY_WECOM_URL = process.env.PUSH_KEY_WECOM_URL;
 }
 
 if (process.env.QQ_SKEY) {
@@ -162,24 +174,26 @@ if (process.env.PUSH_PLUS_USER) {
  * @param author 作者仓库等信息  例：`本脚本免费使用 By：xxxx`
  * @returns {Promise<unknown>}
  */
-async function sendNotify(text, desp, params = {}, author = '\n\n仅供用于学习') {
+async function sendNotify(text, desp, params = {}, author = '\n\nJDHelloWorld.ts') {
   //提供6种通知
   desp += author;//增加作者信息，防止被贩卖等
   let remarks = '';
   try {
-    fs.accessSync('./tools/account.json')
-    remarks = JSON.parse(fs.readFileSync('./tools/account.json').toString())
+    fs.accessSync('./utils/account.json')
+    remarks = JSON.parse(fs.readFileSync('./utils/account.json').toString())
   } catch (e) {
   }
   if (remarks) {
     for (let account of remarks) {
       if (account['pt_pin'] && account['remarks']){
-        desp = desp.replace(new RegExp(account['pt_pin'], 'g'), account['remarks'])
+        text = text.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
+        desp = desp.replace(new RegExp(account['pt_pin'], 'gm'), account['remarks'])
       }
     }
   }
   await Promise.all([
     serverNotify(text, desp),//微信server酱
+    serverWecomNotify(text, desp), // 自建server酱推送
     pushPlusNotify(text, desp)//pushplus(推送加)
   ])
   //由于上述两种微信通知需点击进去才能查看到详情，故text(标题内容)携带了账号序号以及昵称信息，方便不点击也可知道是哪个京东哪个活动
@@ -269,7 +283,52 @@ function serverNotify(text, desp, time = 2100) {
         })
       }, time)
     } else {
-      console.log('\n\n您未提供server酱的SCKEY，取消微信推送消息通知🚫\n');
+      // console.log('\n\n您未提供server酱的SCKEY，取消微信推送消息通知🚫\n');
+      resolve()
+    }
+  })
+}
+
+function serverWecomNotify(text, desp, time = 2100) {
+  return new Promise(resolve => {
+    if (SCKEY_WECOM && SCKEY_WECOM_URL) {
+      //微信server酱推送通知一个\n不会换行，需要两个\n才能换行，故做此替换
+      desp = desp.replace(/[\n\r]/g, '\n\n');
+      const options = {
+        url: SCKEY_WECOM_URL,
+        body: `sendkey=` + SCKEY_WECOM + `&text=${text}&desp=${desp}`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        timeout
+      }
+      setTimeout(() => {
+        $.post(options, (err, resp, data) => {
+          try {
+            if (err) {
+              console.log('发送通知调用API失败！！\n')
+              console.log(err);
+            } else {
+              data = JSON.parse(data);
+              //server酱和Server酱·Turbo版的返回json格式不太一样
+              if (data.errno === 0 || data.data.errno === 0) {
+                console.log('server酱发送通知消息成功🎉\n')
+              } else if (data.errno === 1024) {
+                // 一分钟内发送相同的内容会触发
+                console.log(`server酱发送通知消息异常: ${data.errmsg}\n`)
+              } else {
+                console.log(`server酱发送通知消息异常\n${JSON.stringify(data)}`)
+              }
+            }
+          } catch (e) {
+            $.logErr(e, resp);
+          } finally {
+            resolve(data);
+          }
+        })
+      }, time)
+    } else {
+      // console.log('\n\n您未提供自建server酱的SCKEY，取消推送自建server酱消息通知🚫\n');
       resolve()
     }
   })
@@ -305,7 +364,7 @@ function BarkNotify(text, desp, params = {}) {
         }
       })
     } else {
-      console.log('您未提供Bark的APP推送BARK_PUSH，取消Bark推送消息通知🚫\n');
+      // console.log('您未提供Bark的APP推送BARK_PUSH，取消Bark推送消息通知🚫\n');
       resolve()
     }
   })
@@ -357,7 +416,7 @@ function tgBotNotify(text, desp) {
         }
       })
     } else {
-      console.log('您未提供telegram机器人推送所需的TG_BOT_TOKEN和TG_USER_ID，取消telegram推送消息通知🚫\n');
+      // console.log('您未提供telegram机器人推送所需的TG_BOT_TOKEN和TG_USER_ID，取消telegram推送消息通知🚫\n');
       resolve()
     }
   })
@@ -425,7 +484,7 @@ function ddBotNotify(text, desp) {
         }
       })
     } else {
-      console.log('您未提供钉钉机器人推送所需的DD_BOT_TOKEN或者DD_BOT_SECRET，取消钉钉推送消息通知🚫\n');
+      // console.log('您未提供钉钉机器人推送所需的DD_BOT_TOKEN或者DD_BOT_SECRET，取消钉钉推送消息通知🚫\n');
       resolve()
     }
   })
@@ -467,7 +526,7 @@ function qywxBotNotify(text, desp) {
         }
       });
     } else {
-      console.log('您未提供企业微信机器人推送所需的QYWX_KEY，取消企业微信推送消息通知🚫\n');
+      // console.log('您未提供企业微信机器人推送所需的QYWX_KEY，取消企业微信推送消息通知🚫\n');
       resolve();
     }
   });
@@ -596,7 +655,7 @@ function qywxamNotify(text, desp) {
         });
       });
     } else {
-      console.log('您未提供企业微信应用消息推送所需的QYWX_AM，取消企业微信应用消息推送消息通知🚫\n');
+      // console.log('您未提供企业微信应用消息推送所需的QYWX_AM，取消企业微信应用消息推送消息通知🚫\n');
       resolve();
     }
   });
@@ -640,7 +699,7 @@ function iGotNotify(text, desp, params = {}) {
         }
       })
     } else {
-      console.log('您未提供iGot的推送IGOT_PUSH_KEY，取消iGot推送消息通知🚫\n');
+      // console.log('您未提供iGot的推送IGOT_PUSH_KEY，取消iGot推送消息通知🚫\n');
       resolve()
     }
   })
@@ -684,7 +743,7 @@ function pushPlusNotify(text, desp) {
         }
       })
     } else {
-      console.log('您未提供push+推送所需的PUSH_PLUS_TOKEN，取消push+推送消息通知🚫\n');
+      // console.log('您未提供push+推送所需的PUSH_PLUS_TOKEN，取消push+推送消息通知🚫\n');
       resolve()
     }
   })
