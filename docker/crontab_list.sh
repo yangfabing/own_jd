@@ -217,5 +217,6 @@
 30 * * * * ts-node /scripts/jd_jxgc.ts |ts >> /scripts/logs/jd_jxgc.log 2>&1
 #京喜牧场上新通知
 0 * * * * ts-node /scripts/jd_jxmc_stock.ts |ts >> /scripts/logs/jd_jxmc_stock.log 2>&1
-
+#集魔方
+6 8,20 * * * ts-node /scripts/jd_mofang.ts |ts >> /scripts/logs/jd_mofang.log 2>&1
 
