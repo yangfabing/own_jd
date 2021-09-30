@@ -176,21 +176,17 @@
 #柠檬特务Z行动-星小店
 20 0 * * * node /scripts/jd_twz-star.js >> /scripts/logs/jd_twz-star.log 2>&1
 #循环任务检测
-# 0 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
+0 * * * * sh +x /scripts/task_loop.sh |ts >> /scripts/logs/task_loop.log 2>&1
 #财富岛定时循环任务
-# 1 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
+1 * * * * ts-node /scripts/jd_cfd_loop.ts |ts >> /scripts/logs/jd_cfd_loop.log 2>&1
 #翻翻乐
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
 #京喜签到
 5 0 * * * node /scripts/jd_jxqd.js >> /scripts/logs/jd_jxqd.log 2>&1
-#人人视频
-# 10 9 * * * python3 /scripts/rrtv.py >> /scripts/logs/rrtv.log 2>&1
 #京喜财富岛
-18 0-23/2 * * * node /scripts/gua_wealth_island.js >> /scripts/logs/gua_wealth_island.log 2>&1
-#财富岛互助
-18 0,1,9,14,18 * * * node /scripts/gua_wealth_island_help.js >> /scripts/logs/gua_wealth_island_help.log 2>&1
+20 * * * * ts-node /scripts/jd_cfd.ts |ts >> /scripts/logs/jd_cfd.log 2>&1
 #财富岛提现
-59 11,12,23 * * * node /scripts/jd_cfdtx.js >> /scripts/logs/jd_cfdtx.log 2>&1
+59 11,12,23 * * * ts-node /scripts/jd_cfd_withdraw.ts |ts >> /scripts/logs/jd_cfd_withdraw.log 2>&1
 #伊利养牛
 0 12 * * * node /scripts/jd_ylyn.js >> /scripts/logs/jd_ylyn.log 2>&1
 #摇钱树助力
@@ -219,4 +215,6 @@
 0 * * * * ts-node /scripts/jd_jxmc_stock.ts |ts >> /scripts/logs/jd_jxmc_stock.log 2>&1
 #集魔方
 6 8,20 * * * ts-node /scripts/jd_mofang.ts |ts >> /scripts/logs/jd_mofang.log 2>&1
+#京东金融APP-签到-天天拼图
+30 0,16 * * * node /scripts/jd_ttpt.js >> /scripts/logs/jd_ttpt.log 2>&1
 

@@ -33,6 +33,7 @@ else:
 
 
 today_answer = ''
+first_info = None
 
 
 def start():
@@ -40,7 +41,7 @@ def start():
         do_sign(tk)
         do_scan_score(tk)
         do_answer(tk)
-        # do_comment(tk)
+        do_comment(tk)
 
 
 def do_sign(tk):
@@ -128,6 +129,9 @@ def do_scan_score(tk):
 
 
 def do_comment(tk):
+    if not first_info:
+        return
+
     try:
         url = 'https://bm2-api.bluemembers.com.cn/v1/app/comment/create2'
         header = {
@@ -146,14 +150,14 @@ def do_comment(tk):
         comment = get_today_shi_ci()
         comment = comment + '\n' + f'今日答案：{today_answer}'
         body = {
-            'category': 4,
-            'info_hid': '1f12a40e0cc6461db3aec81c8479df6e',
-            'planet': '平台指南',
-            'planet_hid': '7aef177228f840dca8147400dd19bd33',
-            'publish_user_hid': '9d2d7a8843714f8fabae9922676fd2c8',
-            'title': '在线宠粉，速来pick 精华帖攻略！',
-            'topic': '精华帖攻略',
-            'topic_hid': 'ead55a71c9424d9aab41990b7d096eac',
+            'category': first_info['category'],
+            'info_hid': first_info['data_id'],
+            'planet': first_info['planet'],
+            'planet_hid': first_info['planet_hid'],
+            'publish_user_hid': first_info['user_hid'],
+            'title': first_info['title'],
+            'topic': first_info['topic'],
+            'topic_hid': first_info['topic_hid'],
             'content': comment,
         }
         resp = ss.post(url=url, headers=header, json=body).json()
@@ -266,6 +270,9 @@ def get_comment_list(tk):
             data_list = resp['data']['list']
             contents = []
             for data in data_list:
+                global first_info
+                if not first_info:
+                    first_info = data
                 time.sleep(1)
                 data_id = data['data_id']
                 category = data['category']
