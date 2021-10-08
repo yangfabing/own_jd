@@ -128,7 +128,7 @@
 #京享值PK
 # 15 3,6,13,19,21 * * * node /scripts/jd_ddo_pk.js >> /scripts/logs/jd_ddo_pk.log 2>&1
 #京东试用
-# 30 11 * * * node /scripts/jd_try.js >> /scripts/logs/jd_try.log 2>&1
+30 11 * * * node /scripts/jd_try_xh.js >> /scripts/logs/jd_try_xh.log 2>&1
 #东东农场-东东乐园大风车
 18 7 * * * node /scripts/jd_ddly.js >> /scripts/logs/jd_ddly.log 2>&1
 #欧洲杯
