@@ -215,4 +215,9 @@
 6 8,20 * * * ts-node /scripts/jd_mofang.ts |ts >> /scripts/logs/jd_mofang.log 2>&1
 #京东金融APP-签到-天天拼图
 30 0,16 * * * node /scripts/jd_ttpt.js >> /scripts/logs/jd_ttpt.log 2>&1
+#88红包
+5 0,6,18 * * * ts-node /scripts/jd_88hb.ts |ts >> /scripts/logs/jd_88hb.log 2>&1
+#城城领现金
+0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
+
 
