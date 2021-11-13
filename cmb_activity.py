@@ -14,7 +14,7 @@ from requests.sessions import TooManyRedirects
 
 from messageInfo import message, get_message_info
 
-cookies = 'xAgentUID=%2BH6rY4X74HHfyHkSus2G60WzIfqg5M8oqnKT0JdXuBw%3D; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%22%2BH6rY4X74HHfyHkSus2G60WzIfqg5M8oqnKT0JdXuBw%3D%22%2C%22first_id%22%3A%2217a774e3ae14d8-03207b67ba5e36-16001b0a-250125-17a774e3ae28e4%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%2C%22%24latest_referrer%22%3A%22%22%7D%2C%22%24device_id%22%3A%2217a774e3ae14d8-03207b67ba5e36-16001b0a-250125-17a774e3ae28e4%22%7D; WEBTRENDS_ID=183.222.23.194-2892946368.30887617::D36D427163EC9D70544578B4B6F; xAgentAID=54307c79-175a2f77779a-e6a9c445b10242a49a496cbd9e2c8465'
+cookies = ''
 
 # 最好抓包替换成自己的UA
 USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.7(0x18000730) NetType/4G Language/zh_CN'
