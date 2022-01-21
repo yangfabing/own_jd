@@ -10,7 +10,7 @@ import time
 import requests
 import random
 from messageInfo import message, get_message_info
-from shici import get_today_shi_ci
+# from shici import get_today_shi_ci
 
 ss = requests.session()
 
@@ -147,8 +147,8 @@ def do_comment(tk):
             'Origin-Id': 'D25BD59F-75AC-4D70-AE10-3DB6C4173858',
             'Content-Type': 'application/json;charset=utf-8'
         }
-        comment = get_today_shi_ci()
-        comment = comment + '\n' + f'今日答案：{today_answer}'
+        # comment = get_today_shi_ci()
+        comment = f'今日答案：{today_answer}'
         body = {
             'category': first_info['category'],
             'info_hid': first_info['data_id'],
