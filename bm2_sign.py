@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 """
-北京现代APP，签到、浏览得积分、答题得积分
+
 """
 
 import os

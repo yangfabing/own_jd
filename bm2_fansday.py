@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 """
-bjxdAPP，粉丝日积分雨
 
 20 13,16,19 20 * *
 
