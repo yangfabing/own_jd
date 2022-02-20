@@ -112,8 +112,9 @@ def get_tokenkey(ss):
             print(e)
 
         if resp['success']:
-            startid = resp['startId']
-            duration = resp['duration']
+            data = resp['data']
+            startid = data['startId']
+            duration = data['duration']
             if int(duration) > 0:
                 print(f'等待~~~游戏时长:{duration}')
                 time.sleep(duration)
