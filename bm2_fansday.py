@@ -105,7 +105,11 @@ def get_tokenkey(ss):
             '__ts__': int(round(t * 1000))
         }
 
-        resp = ss.get(url=url, params=body).json()
+        try:
+            resp = ss.get(url=url, params=body).json()
+            print(resp)
+        except Exception as e:
+            print(e)
 
         if resp['success']:
             startid = resp['startId']
@@ -132,8 +136,11 @@ def get_tokenkey(ss):
                 'startId': startid,
                 'score': score
             }
-            resp = ss.get(url=url, params=body).json()
-            print(resp)
+            try:
+                resp = ss.get(url=url, params=body).json()
+                print(resp)
+            except Exception as e:
+                print(e)
         else:
             print(f'活动开始失败:{resp["message"]}')
             break
